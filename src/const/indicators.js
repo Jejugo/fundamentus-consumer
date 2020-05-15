@@ -1,0 +1,22 @@
+module.exports = [
+  'Papel',
+  'Cotação',
+  'P/L',
+  'P/VP',
+  'PSR',
+  'Dividend Yield',
+  'P/Ativo',
+  'P/Cap. Giro',
+  'P/EBIT',
+  'P/Ativ.Circ. Líq.',
+  'EV/EBITDA',
+  'Mrg Ebit',
+  'Margem Líquida',
+  'Líq. Corrente',
+  'ROIC',
+  'ROE',
+  'Líq.2meses ', 
+  'Patrimônio Líquido',
+  'Dívida Bruta/PL',
+  'Cresc. 5 anos'
+]
