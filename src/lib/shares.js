@@ -20,7 +20,9 @@ const checkSharesOnCacheAndFundamentus = async () => {
   ])
   
   if(redisData){
-    const shareValues = await Promise.all(redisData.map(key => redisController.getKeyValue(folder, key.replace(`${folder}:`, ''))))
+    const shareValues = await Promise.all(redisData.map(key => 
+      redisController.getKeyValue(folder, key.replace(`${folder}:`, ''))))
+
     console.info('getting data from Redis and filtering good data...')
     return shareValues
   }
@@ -57,8 +59,8 @@ const getGoodShares = async () => {
  */
 const getAllShares = async () => {
   try {
-
     const shares = await checkSharesOnCacheAndFundamentus()
+    
     return {
       status: 200,
       message: 'Data retrieved from Redis.',
@@ -71,6 +73,12 @@ const getAllShares = async () => {
   }
 }
 
+/**
+ * @module lib/shares
+ * @method [lib/shares] fundamentusSync()
+ * @description Get all shares
+ * @returns {{status, message}}
+ */
 const fundamentusSync = async () => {
   try {
     let shares = await integration.getDataFromFundamentus()
