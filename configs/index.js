@@ -1,5 +1,5 @@
 module.exports = {
-  PORT: 5000,
+  PORT: process.env.PORT ||5000,
   REDIS_HOST: "5.0.9",
   REDIS_PORT: "6379",
   REDIS_DB: "1",
