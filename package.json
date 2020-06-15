@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/index.js",
+    "start": "cp configs/config.prod.js configs/index.js; nodemon server/index.js",
+    "dev": "cp configs/config.dev.js configs/index.js; nodemon server/index.js",
     "start:debug": "nodemon --inspect server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --fix --ext .json,.js,.spec.js, src server"

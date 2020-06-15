@@ -3,12 +3,13 @@ const bluebird = require('bluebird')
 let client
 
 const createClient = () => {
-  const { REDIS_HOST, REDIS_DB, REDIS_SCAN_COUNT, REDIS_EXPIRE } = require('../../configs')
+  const { REDIS_HOST, REDIS_DB, REDIS_SCAN_COUNT, REDIS_EXPIRE, REDIS_PASSWORD } = require('../../configs')
   const redisConfig = {
     REDIS_HOST,
     REDIS_DB,
+    REDIS_PASSWORD,
     REDIS_SCAN_COUNT,
-    REDIS_EXPIRE
+    REDIS_EXPIRE  
   }
 
   const redis = require('redis')
