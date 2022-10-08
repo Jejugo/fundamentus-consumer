@@ -15,8 +15,8 @@ module.exports = [
   'Líq. Corrente',
   'ROIC',
   'ROE',
-  'Líq.2meses ', 
+  'Líq.2meses ',
   'Patrimônio Líquido',
   'Dívida Bruta/PL',
-  'Cresc. 5 anos'
-]
+  'Cresc. 5 anos',
+];

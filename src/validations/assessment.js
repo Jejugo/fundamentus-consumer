@@ -1,27 +1,27 @@
-module.exports = (value) => {
-  let points = 0
+module.exports = value => {
+  let points = 0;
 
-  if(value["Cresc.5anos"] > 0){
+  if (value['Cresc.5anos'] > 0) {
     points++;
   }
-  if(value["Dívida Bruta/Patrim."] < 1.15){
+  if (value['Dívida Bruta/Patrim.'] < 1.15) {
     points++;
   }
-  if(value["Líq. Corrente"] > 1){
+  if (value['Líq. Corrente'] > 1) {
     points++;
   }
-  if(value["Margem Líquida"] > 0.1){
+  if (value['Margem Líquida'] > 0.1) {
     points++;
   }
-  if(value["P/L"] > 0){
+  if (value['P/L'] > 0) {
     points++;
   }
-  if(value["ROE"] > 0.1){
+  if (value['ROE'] > 0.1) {
     points++;
   }
-  if(value["Dividend Yield"] > 0.05){
-    points++
+  if (value['Dividend Yield'] > 0.05) {
+    points++;
   }
 
-  return points > 5
-}
+  return points > 5;
+};

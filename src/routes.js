@@ -1,22 +1,22 @@
 const Router = require('koa-router');
 const service = require('./services');
 
-const { shares, health } = service
+const { shares, health } = service;
 
-const setRoutes = (router) => {
-  router.get('/health', health.get)
-  router.get('/goodShares', shares.goodShares)
-  router.get('/shares', shares.allShares)
-  router.get('/sharesSync', shares.fundamentusSync)
-}
+const setRoutes = router => {
+  router.get('/health', health.get);
+  router.get('/shares/sync', shares.fundamentusSync); //sync information with fundamentus wesite
+  router.get('/shares/indicators', shares.fundamentusIndicators); //get shares indicators from fundamentus website
+  router.get('/shares/all', shares.fundamentusGetAllShares);
+};
 
 const createRouter = () => {
-  const router = new Router
-  setRoutes(router)
+  const router = new Router();
+  setRoutes(router);
 
-  return router
-}
+  return router;
+};
 
 module.exports = {
-  routes: () => createRouter().routes()
-}
+  routes: () => createRouter().routes(),
+};

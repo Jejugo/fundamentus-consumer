@@ -16,16 +16,25 @@
     "lint"
   ],
   "dependencies": {
+    "@koa/cors": "^3.3.0",
     "axios": "^0.19.2",
+    "b3api": "^0.0.1",
     "bluebird": "^3.7.2",
     "cheerio": "^1.0.0-rc.3",
+    "cors": "^2.8.5",
+    "csvtojson": "^2.0.10",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "koa": "^2.11.0",
     "koa-router": "^8.0.8",
     "nodemon": "^2.0.3",
+    "prettier": "^2.7.1",
     "puppeteer": "^2.1.1",
     "redis": "^3.0.2",
     "request": "^2.88.2",
-    "request-promise": "^4.2.5"
+    "request-promise": "^4.2.5",
+    "save": "^2.9.0",
+    "selenium-webdriver": "^4.2.0"
   },
   "devDependencies": {
     "eslint": "^7.0.0",

@@ -1,30 +1,36 @@
-const bluebird = require('bluebird')
+const bluebird = require('bluebird');
 
-let client
+let client;
 
 const createClient = () => {
-  const { REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_SCAN_COUNT, REDIS_EXPIRE, REDIS_PASSWORD } = require('../../configs')
+  const {
+    REDIS_HOST,
+    REDIS_PORT,
+    REDIS_DB,
+    REDIS_SCAN_COUNT,
+    REDIS_EXPIRE,
+    REDIS_PASSWORD,
+  } = require('../../configs');
   const redisConfig = {
     host: REDIS_HOST,
     port: REDIS_PORT,
     password: REDIS_PASSWORD,
     REDIS_DB,
     REDIS_SCAN_COUNT,
-    REDIS_EXPIRE  
-  }
+    REDIS_EXPIRE,
+  };
 
-  const redis = require('redis')
+  const redis = require('redis');
 
+  bluebird.promisifyAll(redis.RedisClient.prototype);
+  bluebird.promisifyAll(redis.Multi.prototype);
 
-  bluebird.promisifyAll(redis.RedisClient.prototype)
-  bluebird.promisifyAll(redis.Multi.prototype)
+  console.info('starting Redis...', JSON.stringify(redisConfig));
+  client = redis.createClient(redisConfig);
+  client.on('error', err => console.error('error starting redis: ', err));
 
-  console.info('starting Redis...', JSON.stringify(redisConfig))
-  client = redis.createClient(redisConfig)
-  client.on('error', (err) => console.error('error starting redis: ', err))
-
-  return client
-}
+  return client;
+};
 
 /*
  * const createTestClient = () => {
@@ -40,7 +46,7 @@ const createClient = () => {
  */
 
 module.exports = {
-  get client () {
-    return client || createClient()
-  }
-}
+  get client() {
+    return client || createClient();
+  },
+};

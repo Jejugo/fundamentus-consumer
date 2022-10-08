@@ -1,9 +1,9 @@
-const get = (ctx) => {
+const get = ctx => {
   ctx.body = {
-    status: true
-  }
-}
+    status: true,
+  };
+};
 
 module.exports = {
-  get
-}
+  get,
+};
