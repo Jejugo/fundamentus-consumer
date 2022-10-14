@@ -1,6 +1,8 @@
 import bluebird from 'bluebird';
+/* eslint-disable @typescript-eslint/no-var-requires */
 const redis = require('redis');
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 let client: any;
 
 const createClient = () => {

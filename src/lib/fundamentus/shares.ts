@@ -22,9 +22,11 @@ const folder = 'shares';
  * @returns {String[]}
  */
 export const checkSharesOnCacheAndFundamentus = async () => {
-  let redisData: string[] | null = await redisController.getAllKeysFromFolder({
-    folder,
-  });
+  const redisData: string[] | null = await redisController.getAllKeysFromFolder(
+    {
+      folder,
+    },
+  );
   if (redisData) {
     const shareValues: IFundamentusStockItem[] = await Promise.all(
       redisData.map((key: string) =>
@@ -62,7 +64,7 @@ export const getFundamentusIndicators = async (
  */
 export const sync = async (): Promise<IGetResponse<any>> => {
   try {
-    let shares = await integration.getSharesFromFundamentus();
+    const shares = await integration.getSharesFromFundamentus();
     if (shares) {
       shares.forEach(
         async (share: any) =>
@@ -101,8 +103,8 @@ export const mergeStockData = (
 ) => {
   const allAssets: IStockItem[] = [];
   if (fundamentusStocks) {
-    for (let asset of fundamentusStocks) {
-      for (let sheetStock of sheetStocks) {
+    for (const asset of fundamentusStocks) {
+      for (const sheetStock of sheetStocks) {
         if (
           asset['Papel'].toLowerCase() ===
           sheetStock['código_de_neg.'].toLowerCase()
@@ -120,7 +122,7 @@ export const mergeStockData = (
             'capex/fco': sheetStock['capex/fco'],
             'capex/d&a': sheetStock['capex/d&a'],
             'L/P': (asset['Cotação'] / asset['P/L'] / asset['Cotação']).toFixed(
-              2
+              2,
             ),
             valor_de_mercado: sheetStock['valor_de_mercado'],
             dividendo_por_acao: (
@@ -131,7 +133,7 @@ export const mergeStockData = (
               (asset['Cotação'] / asset['P/L'] / asset['Cotação'])
             ).toFixed(2),
             'Líq.2meses': 0,
-            quantity: ''
+            quantity: '',
           });
         }
       }

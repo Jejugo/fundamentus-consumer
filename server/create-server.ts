@@ -9,7 +9,7 @@ const options = {
 const createServer = (): Koa<Koa.DefaultState, Koa.DefaultContext> => {
   const app: Koa = new Koa();
   app.use(routes.routes());
-  app.use((ctx: Koa.Context) => cors(options));
+  app.use(() => cors(options));
 
   return app;
 };

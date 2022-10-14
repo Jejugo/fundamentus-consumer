@@ -60,7 +60,7 @@ export const getSharesFromFundamentus = async (): Promise<
   IFundamentusStockItem[] | undefined
 > => {
   try {
-    let rows: IFundamentusStockItem[] = [];
+    const rows: IFundamentusStockItem[] = [];
     const response = await axios.get(fundamentusUrl);
     const $ = cheerio.load(response.data);
     $(`table tbody tr`).each((index: number, element: cheerio.Element) => {
@@ -89,7 +89,7 @@ export const getSharesFromFundamentus = async (): Promise<
           'Cresc.5anos': 0,
         };
 
-        let row = getRow($, child);
+        const row = getRow($, child);
         finalRow = buildFinalRow(finalRow, row);
         rows.push(finalRow);
       });
@@ -116,7 +116,7 @@ export const getCompaniesTypesFromB3 = async (): Promise<void> => {
     .headless()
     .windowSize(screen);
 
-  let driver: any = await new Builder()
+  const driver: any = await new Builder()
     .forBrowser(Browser.CHROME)
     .setChromeOptions(chromeOptions)
     .build()
