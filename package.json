@@ -2,12 +2,13 @@
   "name": "fundamentus-consumer",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
-    "start": "cp configs/config.prod.js configs/index.js; nodemon server/index.js",
-    "dev": "cp configs/config.dev.js configs/index.js; nodemon server/index.js",
+    "start": "cp configs/config.prod.js configs/index.js; nodemon server/index.ts",
+    "dev": "cp configs/config.dev.js configs/index.js; nodemon server/index.ts",
     "start:debug": "nodemon --inspect server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "ts-lint": "tsc --watch",
     "lint": "eslint --fix --ext .json,.js,.spec.js, src server"
   },
   "author": "",
@@ -37,8 +38,27 @@
     "selenium-webdriver": "^4.2.0"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/cheerio": "^0.22.31",
+    "@types/cors": "^2.8.12",
+    "@types/csvtojson": "^2.0.0",
+    "@types/koa": "^2.13.5",
+    "@types/koa-bodyparser": "^4.3.8",
+    "@types/koa-json": "^2.0.20",
+    "@types/koa-logger": "^3.1.2",
+    "@types/koa-router": "^7.4.4",
+    "@types/koa__cors": "^3.3.0",
+    "@types/node": "^18.8.5",
+    "@types/node-fetch": "^2.6.2",
+    "@types/puppeteer": "^5.4.7",
+    "@types/redis": "^4.0.11",
+    "@types/request": "^2.48.8",
+    "@types/request-promise": "^4.1.48",
+    "@types/selenium-webdriver": "^4.1.5",
     "eslint": "^7.0.0",
     "eslint-plugin-node": "^11.1.0",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
   }
 }

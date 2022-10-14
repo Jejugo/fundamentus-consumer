@@ -1,6 +1,7 @@
-const bluebird = require('bluebird');
+import bluebird from 'bluebird';
+const redis = require('redis');
 
-let client;
+let client: any;
 
 const createClient = () => {
   const {
@@ -20,14 +21,14 @@ const createClient = () => {
     REDIS_EXPIRE,
   };
 
-  const redis = require('redis');
-
   bluebird.promisifyAll(redis.RedisClient.prototype);
   bluebird.promisifyAll(redis.Multi.prototype);
 
   console.info('starting Redis...', JSON.stringify(redisConfig));
   client = redis.createClient(redisConfig);
-  client.on('error', err => console.error('error starting redis: ', err));
+  client.on('error', (err: Error) =>
+    console.error('error starting redis: ', err),
+  );
 
   return client;
 };
@@ -45,7 +46,7 @@ const createClient = () => {
  * }
  */
 
-module.exports = {
+export default {
   get client() {
     return client || createClient();
   },

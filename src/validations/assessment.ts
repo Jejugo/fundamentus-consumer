@@ -1,4 +1,4 @@
-module.exports = value => {
+export default (value: any) => {
   let points = 0;
 
   if (value['Cresc.5anos'] > 0) {
