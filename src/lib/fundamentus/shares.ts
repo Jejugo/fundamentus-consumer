@@ -1,12 +1,8 @@
-import {
-  IFundamentusStockItem,
-  IGetResponse,
-  IStockItem,
-} from 'lib/interfaces';
-
 import * as filter from '../../filters/shares';
 import * as integration from '../../integration/integration';
 import * as redisController from '../redisController';
+
+import { IGetResponse, IFundamentusStockItem, IStockItem } from '../interfaces';
 
 import redis from '../../../server/redis';
 import { ICSVStockData } from 'integration/interfaces';
@@ -139,4 +135,6 @@ export const mergeStockData = (
       }
     }
   }
+
+  return allAssets;
 };

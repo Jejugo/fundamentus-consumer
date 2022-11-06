@@ -1,3 +1,8 @@
+export interface IGetResponse<T> {
+  status: number;
+  message: string;
+  items?: T;
+}
 export type IFundamentusStockTypes =
   | 'Papel'
   | 'Cotação'
@@ -84,8 +89,8 @@ export interface IStockItem {
   lucro_por_acao: string;
 }
 
-export interface IGetResponse<T> {
+export interface IStockItemResponse {
   status: number;
   message: string;
-  items?: T;
+  items: IFundamentusStockItem[] | IStockItem[];
 }

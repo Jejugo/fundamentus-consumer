@@ -4,9 +4,9 @@
   "description": "",
   "main": "server/index.js",
   "scripts": {
-    "start": "cp configs/config.prod.js configs/index.js; nodemon server/index.ts",
-    "dev": "cp configs/config.dev.js configs/index.js; nodemon server/index.ts",
-    "start:debug": "nodemon --inspect server/index.js",
+    "start": "cp configs/config.prod.ts configs/index.ts; nodemon server/index.ts",
+    "dev": "cp configs/config.dev.ts configs/index.ts; nodemon server/index.ts",
+    "start:debug": "nodemon --inspect server/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts-lint": "tsc --watch",
     "lint": "eslint --fix --ext .json,.js,.spec.js, '**/*/*.ts'"

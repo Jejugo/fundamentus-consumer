@@ -3,6 +3,36 @@ export {};
 declare global {
   // API
 
+  export interface IGetResponse<T> {
+    status: number;
+    message: string;
+    items?: T;
+  }
+
+  interface IFundamentusStockItem {
+    Papel: string;
+    Cotação: number;
+    'P/L': number;
+    'P/VP': number;
+    PSR: number;
+    'Dividend Yield': number;
+    'P/Ativo': number;
+    'P/Cap. Giro': number;
+    'P/EBIT': number;
+    'P/Ativ.Circ. Líq.': number;
+    'EV/EBIT': number;
+    'EV/EBITDA': number;
+    'Mrg Ebit': number;
+    'Margem Líquida': number;
+    'Líq. Corrente': number;
+    ROIC: number;
+    ROE: number;
+    'Líq.2meses ': number;
+    'Patrimônio Líquido': number;
+    'Dívida Bruta/Patrim.': number;
+    'Cresc.5anos': number;
+  }
+
   interface IStockItem {
     Papel: string;
     Cotação: number;

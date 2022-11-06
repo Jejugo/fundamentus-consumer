@@ -1,5 +1,5 @@
 export default {
-  PORT: process.env.PORT || 5000,
+  PORT: process.env.PORT || 4000,
   REDIS_HOST: '127.0.0.1',
   REDIS_PORT: '6379',
   REDIS_DB: '1',

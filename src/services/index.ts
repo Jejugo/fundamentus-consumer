@@ -1,2 +1,2 @@
-export const shares = require('./shares');
-export const health = require('./health');
+export * as shares from './shares';
+export * as health from './health';
