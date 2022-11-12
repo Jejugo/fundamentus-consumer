@@ -3,48 +3,8 @@ export interface IGetResponse<T> {
   message: string;
   items?: T;
 }
-export type IFundamentusStockTypes =
-  | 'Papel'
-  | 'Cotação'
-  | 'P/L'
-  | 'P/VP'
-  | 'PSR'
-  | 'Dividend Yield'
-  | 'P/Ativo'
-  | 'P/Cap. Giro'
-  | 'P/EBIT'
-  | 'P/Ativ.Circ. Líq.'
-  | 'EV/EBIT'
-  | 'EV/EBITDA'
-  | 'Mrg Ebit'
-  | 'Margem Líquida'
-  | 'Líq. Corrente'
-  | 'ROIC'
-  | 'ROE'
-  | 'Líq.2meses '
-  | 'Patrimônio Líquido'
-  | 'Dívida Bruta/Patrim.'
-  | 'Cresc.5anos';
 
-export type IFundamentusReitsTypes =
-  | 'Papel'
-  | 'Segmento'
-  | 'Cotação'
-  | 'FFO'
-  | 'Yield'
-  | 'Dividend'
-  | 'Yield'
-  | 'P/VP'
-  | 'Valor de Mercado'
-  | 'Liquidez'
-  | 'Qtd. de imóveis'
-  | 'Preço m2'
-  | 'Aluguel m2'
-  | 'Cap.Rate'
-  | 'Vacância Média'
-  | 'Endereço';
-
-export interface IFundamentusStockItem {
+interface IFundamentusStockItem {
   Papel: string;
   Cotação: number;
   'P/L': number;
@@ -68,24 +28,7 @@ export interface IFundamentusStockItem {
   'Cresc.5anos': number;
 }
 
-export interface IFundamentusReitsItem {
-  Papel: string;
-  Segmento: string;
-  Cotação: number;
-  'FFO Yield': number;
-  'Dividend Yield': number;
-  'P/VP': number;
-  'Valor de Mercado': number;
-  Liquidez: number;
-  'Qtd. Imóveis': number;
-  'Preço m2': number;
-  'Aluguel m2': number;
-  'Cap. Rate': number;
-  'Vacância Média': number;
-  Endereço: string;
-}
-
-export interface IStockItem {
+interface IStockItem {
   Papel: string;
   Cotação: number;
   'P/L': number;
@@ -124,8 +67,51 @@ export interface IStockItem {
   lucro_por_acao: string;
 }
 
-export interface IStockItemResponse {
+interface IStockItemResponse {
   status: number;
   message: string;
   items: IFundamentusStockItem[] | IStockItem[];
+}
+
+// INTERNAL STATE
+interface IStatement {
+  checked: boolean;
+  statement: string;
+  weight: number;
+}
+
+interface IDropdownItem {
+  value: string;
+  label: string;
+}
+
+interface IUser {
+  uid: string;
+  email: string;
+}
+
+interface IAuthUserContext {
+  authUser: User | null;
+  loading: boolean;
+}
+
+export interface IWalletResistancePoints {
+  [key: string]: number;
+}
+
+// FIRESTORE
+
+interface IFirebaseUserAssetStatements {
+  [key: string]: IStatement[];
+}
+
+interface IFirebaseUserAssets {
+  [key: string]: IStockItem;
+}
+
+interface IFirebaseStrategyStatements {
+  [key: string]: IStatement;
+}
+interface IFirebaseWatchList {
+  shares: string[];
 }

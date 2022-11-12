@@ -1,11 +1,15 @@
 import * as filter from '../../filters/shares';
-import * as integration from '../../integration/integration';
+import { getSharesFromFundamentus } from '../../integration/fundamentus/shares';
+import { getCompaniesTypesFromB3 } from '../../integration/b3/companies';
+import { getDataFromCSV } from '../../integration/csv/holderCSV';
 import * as redisController from '../redisController';
+import Firestore from '../../firebase';
 
 import { IGetResponse, IFundamentusStockItem, IStockItem } from '../interfaces';
 
 import redis from '../../../server/redis';
 import { ICSVStockData } from 'integration/interfaces';
+import { convertArrayToObject } from '../../builders/arrays';
 
 const redisClient = redis.client;
 
@@ -34,7 +38,7 @@ export const checkSharesOnCacheAndFundamentus = async () => {
     return shareValues;
   }
 
-  return integration.getSharesFromFundamentus();
+  return getSharesFromFundamentus();
 };
 
 export const getFundamentusIndicators = async (
@@ -60,7 +64,7 @@ export const getFundamentusIndicators = async (
  */
 export const sync = async (): Promise<IGetResponse<any>> => {
   try {
-    const shares = await integration.getSharesFromFundamentus();
+    const shares = await getSharesFromFundamentus();
     if (shares) {
       shares.forEach(
         async (share: any) =>
@@ -69,6 +73,26 @@ export const sync = async (): Promise<IGetResponse<any>> => {
             JSON.stringify(share),
           ),
       );
+
+      const sharesMap = convertArrayToObject(shares, 'Papel');
+      const sharesRef = Firestore.collection('userAssets').doc(
+        'zn1FPK3pJjgQZqKADAmwaXBe9eD2',
+      );
+      const docGet = await sharesRef.get();
+      const currentStocks = docGet.data();
+      if (currentStocks) {
+        const updatedStocks = Object.keys(currentStocks).reduce(
+          (acc, stockSymbol) => ({
+            ...acc,
+            [stockSymbol]: {
+              ...currentStocks[stockSymbol],
+              Cotação: sharesMap[stockSymbol]['Cotação'],
+            },
+          }),
+          {},
+        );
+        await sharesRef.set(updatedStocks);
+      }
     }
 
     return {
@@ -85,11 +109,11 @@ export const sync = async (): Promise<IGetResponse<any>> => {
 };
 
 export const sharesTypesSync = async () => {
-  await integration.getCompaniesTypesFromB3();
+  await getCompaniesTypesFromB3();
 };
 
-export const getSheetStocks = async () => {
-  const allShares = await integration.getAllCompaniesFromB3();
+export const getSheetStocks = async (assetType: string) => {
+  const allShares = await getDataFromCSV(assetType);
   return allShares;
 };
 
