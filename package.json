@@ -2,11 +2,11 @@
   "name": "fundamentus-consumer",
   "version": "1.0.0",
   "description": "",
-  "main": "server/index.js",
+  "main": "server/index.ts",
   "scripts": {
     "start": "cp configs/config.prod.ts configs/index.ts; nodemon server/index.ts",
     "dev": "cp configs/config.dev.ts configs/index.ts; nodemon server/index.ts",
-    "start:debug": "nodemon --inspect server/index.ts",
+    "start:debug": "node --inspect server/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts-lint": "tsc --watch",
     "lint": "eslint --fix --ext .json,.js,.spec.js, '**/*/*.ts'"
@@ -26,6 +26,7 @@
     "csvtojson": "^2.0.10",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "firebase-admin": "^11.2.0",
     "koa": "^2.11.0",
     "koa-router": "^8.0.8",
     "nodemon": "^2.0.3",

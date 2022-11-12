@@ -1,4 +1,6 @@
-export default (value: any) => {
+import { IStockItem } from 'lib/interfaces';
+
+export default (value: IStockItem) => {
   let points = 0;
 
   if (value['Cresc.5anos'] > 0) {
