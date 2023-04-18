@@ -1,4 +1,4 @@
-import * as fundamentusLib from '../lib/fundamentus/reits';
+import * as fundamentusLib from '../lib/reits';
 import Koa from 'koa';
 
 export const fundamentusIndicators = async (

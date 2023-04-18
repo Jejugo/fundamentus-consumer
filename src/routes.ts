@@ -6,13 +6,9 @@ const setRoutes = (router: Router<any, {}>) => {
   //sync information with fundamentus wesite
   router.get('/shares/sync', shares.fundamentusSync);
   //get shares indicators from fundamentus website
-  router.get('/fundamentus/shares/indicators', shares.fundamentusIndicators);
+  router.get('/shares', shares.getShares);
   //get reits indicators from fundamentus website
   router.get('/fundamentus/reits/indicators', reits.fundamentusIndicators);
-  //get reits indicators from fundamentus website
-  router.get('/sheet/:assetType', shares.getSheetData);
-  //get shares indicators from fundamentus website and merge with with csv sheet.
-  router.get('/shares/all', shares.fundamentusGetAllShares);
 };
 
 const createRouter = () => {
