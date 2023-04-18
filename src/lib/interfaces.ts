@@ -44,28 +44,30 @@ export type IFundamentusReitsTypes =
   | 'Vacância Média'
   | 'Endereço';
 
-export interface IFundamentusStockItem {
-  Papel: string;
-  Cotação: number;
-  'P/L': number;
-  'P/VP': number;
-  PSR: number;
-  'Dividend Yield': number;
-  'P/Ativo': number;
-  'P/Cap. Giro': number;
-  'P/EBIT': number;
-  'P/Ativ.Circ. Líq.': number;
-  'EV/EBIT': number;
-  'EV/EBITDA': number;
-  'Mrg Ebit': number;
-  'Margem Líquida': number;
-  'Líq. Corrente': number;
-  ROIC: number;
-  ROE: number;
-  'Líq.2meses ': number;
-  'Patrimônio Líquido': number;
-  'Dívida Bruta/Patrim.': number;
-  'Cresc.5anos': number;
+export interface IStockItem {
+  papel: string;
+  nome: string;
+  setor_bovespa: string | null;
+  subsetor_bovespa: string | null;
+  segmento_bovespa: string | null;
+  participação_no_ibovespa: string | null;
+  crescimento_médio_anual: string | null;
+  cotacao: number | null;
+  'p/l': number | null;
+  'p/vp': number | null;
+  psr: number | null;
+  dividend_yield: number | null;
+  margem_ebit: number | null;
+  margem_liquida: number | null;
+  patrimonio_liquido: number | null;
+  liq_corrente: number | null;
+  'div/patrimonio': number | null;
+  roe: number | null;
+  cresc_5_anos: number | null;
+  valor_de_mercado: string | null;
+  dividendo_por_acao?: string | null;
+  lucro_por_acao?: string | null;
+  quantity?: string | null;
 }
 
 export interface IFundamentusReitsItem {
@@ -85,7 +87,7 @@ export interface IFundamentusReitsItem {
   Endereço: string;
 }
 
-export interface IStockItem {
+export interface IStockItemOld {
   Papel: string;
   Cotação: number;
   'P/L': number;
@@ -106,7 +108,7 @@ export interface IStockItem {
   'Líq.2meses': number;
   'Patrimônio Líquido': number;
   'Dívida Bruta/Patrim.': number;
-  'Cresc.5anos': number;
+  'Cresc.5anos': number | null;
   nome: string;
   setor_bovespa: string;
   subsetor_bovespa: string;
@@ -127,5 +129,5 @@ export interface IStockItem {
 export interface IStockItemResponse {
   status: number;
   message: string;
-  items: IFundamentusStockItem[] | IStockItem[];
+  items: IStockItem[];
 }

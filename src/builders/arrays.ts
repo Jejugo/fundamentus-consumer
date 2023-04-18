@@ -1,4 +1,4 @@
-import { IStockItem, IFundamentusStockItem } from 'lib/interfaces';
+import { IStockItem } from 'lib/interfaces';
 
 interface RandomObject<T> {
   [key: string]: T;
@@ -10,11 +10,11 @@ interface RandomObject<T> {
  * @param {String} key String that will define which key will be used as the object key
  */
 export const convertArrayToObject = <
-  T extends RandomObject<string | number> | IStockItem | IFundamentusStockItem,
+  T extends RandomObject<string | number> | IStockItem,
 >(
   arr: T[],
   key: string,
-): RandomObject<IStockItem | IFundamentusStockItem> => {
+): RandomObject<IStockItem> => {
   return arr.reduce(
     (acc, curr) => ({
       ...acc,
