@@ -12,10 +12,9 @@ export const getDataFromCSV = async (
     const sharesFundaments = await csvtojsonV2().fromFile(
       assetType === 'shares'
         ? `${SHEET_PATH}/shares/Planilha_do_Holder_08.04.2023.csv`
-        : `${SHEET_PATH}/reits/Planilha_do_Holder_fii_18.10.2022.csv`,
+        : `${SHEET_PATH}/reits/Planilha_do_Holder_fii_08.04.2023.csv`,
     );
 
-    console.log(sharesFundaments);
     const header: ICSVHeader = sharesFundaments.shift();
 
     const formattedHeader: ICSVFormattedHeader = Object.keys(header).reduce(
