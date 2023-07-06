@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["es6"],
+    "module": "nodenext",
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "isolatedModules": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "sourceMap": true,
+    "baseUrl": "./src"
+  },
+  "include": ["src", "**/*.ts"],
+  "exclude": ["node_modules"]
+}
