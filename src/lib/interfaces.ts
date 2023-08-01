@@ -85,6 +85,14 @@ export interface IFundamentusReitsItem {
   Endereço: string;
 }
 
+export interface IBondItem {
+  [key: string]: number;
+}
+
+export interface IInternationalItem {
+  [key: string]: number;
+}
+
 export interface IReitItem {
   alguelM2: number;
   capRate: number;

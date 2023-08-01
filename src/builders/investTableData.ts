@@ -53,7 +53,7 @@ export const buildAssetTableData = ({
     asset: assets[item].nome,
     recommended: recommendedPercentages[item].percentage,
     currentValue:
-      parseInt(assets[item].quantity) * parseInt(assets[item].cotacao),
+      parseInt(assets[item].quantity) * parseFloat(assets[item].cotacao),
     recommendedValue: 0,
     adjustment: '',
     grade: assetPoints[item],

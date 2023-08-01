@@ -21,13 +21,16 @@ const setRoutes = (router: Router<any, any>) => {
   router.get('/reits', reits.getReits);
   router.get('/reits/sectors', reits.getReitsSectors);
 
+  router.get('/bonds', bonds.getBonds);
   router.get('/bonds/sectors', bonds.getBondsSectors);
   router.delete('/bonds/:symbol', bonds.deleteBond);
 
+  router.get('/international/assets', international.getInternationalAssets);
   router.get('/international/sectors', international.getInternationalSectors);
 
   router.get('/user/strategy', user.getStrategies);
   router.get('/user/recommendation', user.getWalletRecommendation);
+  router.post('/sync/user/:id', user.userRecommendationUpdate);
 };
 
 const createRouter = () => {

@@ -36,3 +36,25 @@ export const getData = async (
     items,
   };
 };
+
+export const setData = async (firebaseCollection, data, userId) => {
+  const collectionRef = Firestore.collection(firebaseCollection);
+  const batch = Firestore.batch();
+
+  // Update each document in Firestore
+
+  const docRef = collectionRef.doc(userId); // Assuming each item has an 'id' field
+  batch.set(docRef, data); // Use 'set' to overwrite existing data. Use 'update' to update fields.
+
+  // Commit the batch
+  await batch.commit();
+
+  // // Cache the data in Redis
+  // const redisSetAsync = promisify(redisClient.set).bind(redisClient);
+  // await redisSetAsync(redisKey, JSON.stringify(data), 'EX', 60 * 60 * 24); // cache for 24 hours
+
+  return {
+    fromFirebase: true,
+    items: data,
+  };
+};

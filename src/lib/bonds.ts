@@ -1,5 +1,6 @@
 import { FieldValue } from 'firebase-admin/firestore';
 import Firestore from '../firebase';
+import { IBondItem } from './interfaces';
 
 export const bondSectors = [
   'Tesouro Direto',
@@ -17,6 +18,30 @@ export const getBondsSectors = async () => {
     status: 200,
     message: 'Data Retrieved',
     items: bondSectors,
+  };
+};
+
+export const getBonds = async () => {
+  const stocksRef = Firestore.collection('userBonds');
+  const snapshot = await stocksRef.get();
+  const bonds: IBondItem[] = [];
+
+  if (snapshot.empty) {
+    return {
+      status: 404,
+      message: 'No Bonds found.',
+    };
+  }
+
+  snapshot.forEach((doc: any) => {
+    bonds.push(doc.data());
+  });
+
+  return {
+    status: 200,
+    message: 'Data retrieved.',
+    length: bonds.length,
+    items: bonds,
   };
 };
 

@@ -11,7 +11,7 @@ import {
   buildAssetTableDataNoStrategy,
 } from '../../builders/investTableData';
 import { columnsNames } from '../../const/investTableColumns';
-import { getData } from '../../commons/request';
+import { getData, setData } from '../../commons/request';
 import { RecommendedPercentages } from '../../commons/interfaces';
 import { calculatePercentage } from '../../commons/utils';
 
@@ -24,7 +24,7 @@ const walletRecommendationCalls = {
   getStocksStrategy: () => getData('stocks:strategy', 'stocksStrategy', true),
   getReitsStrategy: () => getData('reits:strategy', 'reitsStrategy', true),
   getUserGoals: async () => {
-    const data = await getData('user:goals', 'goals');
+    const data = await getData('user:goals', 'goals', true);
     return data.items[0];
   },
 };
@@ -345,3 +345,61 @@ export const getWalletRecommendation =
       },
     };
   };
+
+export const userRecommendationUpdate = async (userId: string) => {
+  const { items: userStocks } = await getData(
+    'user:stocks',
+    'userStocks',
+    true,
+  );
+  const { items: stocks } = await getData('stocks', 'stocks', true);
+
+  const { items: userReits } = await getData('user:reits', 'userReits', true);
+  const { items: reits } = await getData('reits', 'reits', true);
+
+  const usertStocksItem = userStocks[0];
+  const allStocks = convertArrayToObject(stocks, 'papel');
+
+  const usertReitsItem = userReits[0];
+  const allReits = convertArrayToObject(reits, 'papel');
+
+  const commonStockKeys = Object.keys(allStocks).filter(item => {
+    return item in usertStocksItem;
+  });
+
+  const commonReitKeys = Object.keys(allReits).filter(item => {
+    return item in usertReitsItem;
+  });
+
+  const finalStockValue = commonStockKeys.reduce(
+    (acc, curr) => ({
+      ...acc,
+      [curr]: {
+        ...allStocks[curr],
+        quantity: usertStocksItem[curr].quantity,
+      },
+    }),
+    {},
+  );
+
+  const finalReitValue = commonReitKeys.reduce(
+    (acc, curr) => ({
+      ...acc,
+      [curr]: {
+        ...allReits[curr],
+        quantity: usertReitsItem[curr].quantity,
+      },
+    }),
+    {},
+  );
+
+  await Promise.all([
+    await setData('userStocks', finalStockValue, userId),
+    await setData('userReits', finalReitValue, userId),
+  ]);
+
+  return {
+    status: 200,
+    message: `Data updated successfully`,
+  };
+};
