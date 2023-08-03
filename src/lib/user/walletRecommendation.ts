@@ -3,7 +3,7 @@ import {
   convertArrayToObject,
   convertObjectKeysToList,
 } from '../../builders/arrays';
-import { IWalletResistancePoints } from '../interfaces';
+import { IReitItem, IStockItem, IWalletResistancePoints } from '../interfaces';
 import calculateAssetPoints from '../../builders/calculateAssetPoints';
 import calculateAssetPercentages from '../../builders/calculateAssetPercentages';
 import {
@@ -15,19 +15,21 @@ import { getData, setData } from '../../commons/request';
 import { RecommendedPercentages } from '../../commons/interfaces';
 import { calculatePercentage } from '../../commons/utils';
 
-const walletRecommendationCalls = {
-  getUserReits: () => getData('user:reits', 'userReits', true),
-  getUserStocks: () => getData('user:stocks', 'userStocks', true),
-  getUserBonds: () => getData('user:bonds', 'userBonds', true),
+const walletRecommendationCalls = userId => ({
+  getUserReits: () => getData('user:reits', 'userReits', userId, true),
+  getUserStocks: () => getData('user:stocks', 'userStocks', userId, true),
+  getUserBonds: () => getData('user:bonds', 'userBonds', userId, true),
   getUserInternational: () =>
-    getData('user:international', 'userInternational', true),
-  getStocksStrategy: () => getData('stocks:strategy', 'stocksStrategy', true),
-  getReitsStrategy: () => getData('reits:strategy', 'reitsStrategy', true),
+    getData('user:international', 'userInternational', userId, true),
+  getStocksStrategy: () =>
+    getData('stocks:strategy', 'stocksStrategy', userId, true),
+  getReitsStrategy: () =>
+    getData('reits:strategy', 'reitsStrategy', userId, true),
   getUserGoals: async () => {
-    const data = await getData('user:goals', 'goals', true);
-    return data.items[0];
+    const data = await getData('user:goals', 'goals', userId, true);
+    return data.items;
   },
-};
+});
 
 const assetNameMap = {
   reits: 'fundos imobiliarios',
@@ -45,24 +47,24 @@ const getUserStrategies = (assets: any, assetStrategy: any) =>
     return acc;
   }, {});
 
-const getWalletData = {
+const getWalletData = (userId: string) => ({
   stocks: {
-    asset: walletRecommendationCalls.getUserStocks,
-    assetStrategy: walletRecommendationCalls.getStocksStrategy,
+    asset: walletRecommendationCalls(userId).getUserStocks,
+    assetStrategy: walletRecommendationCalls(userId).getStocksStrategy,
   },
   reits: {
-    asset: walletRecommendationCalls.getUserReits,
-    assetStrategy: walletRecommendationCalls.getReitsStrategy,
+    asset: walletRecommendationCalls(userId).getUserReits,
+    assetStrategy: walletRecommendationCalls(userId).getReitsStrategy,
   },
   bonds: {
-    asset: walletRecommendationCalls.getUserBonds,
+    asset: walletRecommendationCalls(userId).getUserBonds,
     assetStrategy: null,
   },
   international: {
-    asset: walletRecommendationCalls.getUserInternational,
+    asset: walletRecommendationCalls(userId).getUserInternational,
     assetStrategy: null,
   },
-};
+});
 
 const buildAssetResult = ({
   assetType,
@@ -108,16 +110,20 @@ const buildAssetResult = ({
   };
 };
 
-const getUserAssetStrategies = async (assetType: IAssetType) => {
-  if (!(assetType in getWalletData)) {
+const getUserAssetStrategies = async (
+  assetType: IAssetType,
+  userId: string,
+) => {
+  if (!(assetType in getWalletData(userId))) {
     return {
       assetItems: [],
       userAssetStrategies: {},
     };
   }
 
-  if (!getWalletData[assetType].assetStrategy) {
-    const assets = await getWalletData[assetType].asset();
+  if (!getWalletData(userId)[assetType].assetStrategy) {
+    const assets = await getWalletData(userId)[assetType].asset();
+
     const { items: assetItems } = assets;
 
     return {
@@ -126,7 +132,7 @@ const getUserAssetStrategies = async (assetType: IAssetType) => {
     };
   } else {
     const { asset: getAsset, assetStrategy: getAssetStrategy } =
-      getWalletData[assetType];
+      getWalletData(userId)[assetType];
 
     const [assets, assetStrategy] = await Promise.all([
       getAsset(),
@@ -139,8 +145,8 @@ const getUserAssetStrategies = async (assetType: IAssetType) => {
       items: any;
     };
 
-    let userAssetStrategies = getUserStrategies(assets, assetStrategyItems[0]);
-    userAssetStrategies = convertObjectKeysToList<any>(assetStrategyItems[0]);
+    let userAssetStrategies = getUserStrategies(assets, assetStrategyItems);
+    userAssetStrategies = convertObjectKeysToList<any>(assetStrategyItems);
 
     return {
       userAssetStrategies,
@@ -152,6 +158,7 @@ const getUserAssetStrategies = async (assetType: IAssetType) => {
 interface ICalculateResultByAsset {
   assetTypes: IAssetType[];
   goals: any;
+  userId: string;
 }
 
 interface ICalculateResultByAssetReturn {
@@ -163,6 +170,7 @@ interface ICalculateResultByAssetReturn {
 const calculateResultByAsset = async ({
   assetTypes,
   goals,
+  userId,
 }: ICalculateResultByAsset): Promise<ICalculateResultByAssetReturn> => {
   let result = {} as Record<IAssetType, IAssetRecommentation>;
   let recommendedPercentages = {} as Record<IAssetType, RecommendedPercentages>;
@@ -171,6 +179,7 @@ const calculateResultByAsset = async ({
   for (const assetType of assetTypes) {
     const { userAssetStrategies, assetItems } = await getUserAssetStrategies(
       assetType,
+      userId,
     );
 
     // if asset type has strategy
@@ -194,14 +203,14 @@ const calculateResultByAsset = async ({
 
       allAssets = {
         ...allAssets,
-        [assetType]: assetItems[0],
+        [assetType]: assetItems,
       };
 
-      const tableData: ITableRow[] = Object.keys(assetItems[0])
-        .map((item: string) =>
+      const tableData: ITableRow[] = Object.keys(assetItems)
+        .map((item: any) =>
           buildAssetTableData({
             type: assetType as IAssetType,
-            assets: assetItems[0],
+            assets: assetItems,
             item,
             recommendedPercentages: recommendedPercentagesByAsset,
             assetPoints,
@@ -230,7 +239,7 @@ const calculateResultByAsset = async ({
         ...result,
         [assetType]: {
           percentage: assetTypeOverallPercentage,
-          tableData: Object.keys(assetItems[0]).map((item: string) => {
+          tableData: Object.keys(assetItems).map((item: string) => {
             const recommendedPercentageByAsset = {
               [item]: {
                 name: item,
@@ -251,7 +260,7 @@ const calculateResultByAsset = async ({
 
             return buildAssetTableDataNoStrategy({
               type: assetType as IAssetType,
-              assets: assetItems[0],
+              assets: assetItems,
               item,
               recommendedPercentages: recommendedPercentageByAsset,
             });
@@ -295,56 +304,58 @@ interface IGetWalletRecommendationResponse {
   };
 }
 
-export const getWalletRecommendation =
-  async (): Promise<IGetWalletRecommendationResponse> => {
-    const [goals] = await Promise.all([
-      walletRecommendationCalls.getUserGoals(),
-    ]);
+export const getWalletRecommendation = async (
+  userId: string,
+): Promise<IGetWalletRecommendationResponse> => {
+  const [goals] = await Promise.all([
+    walletRecommendationCalls(userId).getUserGoals(),
+  ]);
 
-    const assetTypes: Partial<IAssetType>[] = Object.keys(goals)
-      .map(asset => asset)
-      .filter(asset => asset !== 'overview') as Partial<IAssetType>[];
+  const assetTypes: Partial<IAssetType>[] = Object.keys(goals)
+    .map(asset => asset)
+    .filter(asset => asset !== 'overview') as Partial<IAssetType>[];
 
-    const {
+  const {
+    result: resultByAsset,
+    recommendedPercentages,
+    allAssets,
+  } = await calculateResultByAsset({
+    assetTypes,
+    goals,
+    userId,
+  });
+
+  const totalInvested = Object.keys(resultByAsset).reduce((acc, curr) => {
+    return (
+      acc +
+      resultByAsset[curr].tableData.reduce((acc, curr) => {
+        return acc + curr.currentValue;
+      }, 0)
+    );
+  }, 0);
+
+  const resultItems = assetTypes.reduce((acc: any, type: any) => {
+    acc[type] = buildAssetResult({
+      assetType: type,
+      totalInvested,
+      goals,
       result: resultByAsset,
       recommendedPercentages,
       allAssets,
-    } = await calculateResultByAsset({
-      assetTypes,
-      goals,
     });
+    return acc;
+  }, {});
 
-    const totalInvested = Object.keys(resultByAsset).reduce((acc, curr) => {
-      return (
-        acc +
-        resultByAsset[curr].tableData.reduce((acc, curr) => {
-          return acc + curr.currentValue;
-        }, 0)
-      );
-    }, 0);
-
-    const resultItems = assetTypes.reduce((acc: any, type: any) => {
-      acc[type] = buildAssetResult({
-        assetType: type,
-        totalInvested,
-        goals,
-        result: resultByAsset,
-        recommendedPercentages,
-        allAssets,
-      });
-      return acc;
-    }, {});
-
-    return {
-      status: 200,
-      message: `Data retrieved successfully`,
-      items: {
-        totalInvested,
-        columnsNames,
-        ...resultItems,
-      },
-    };
+  return {
+    status: 200,
+    message: `Data retrieved successfully`,
+    items: {
+      totalInvested,
+      columnsNames,
+      ...resultItems,
+    },
   };
+};
 
 export const userRecommendationUpdate = async (userId: string) => {
   const { items: userStocks } = await getData(
@@ -357,10 +368,10 @@ export const userRecommendationUpdate = async (userId: string) => {
   const { items: userReits } = await getData('user:reits', 'userReits', true);
   const { items: reits } = await getData('reits', 'reits', true);
 
-  const usertStocksItem = userStocks[0];
+  const usertStocksItem = userStocks;
   const allStocks = convertArrayToObject(stocks, 'papel');
 
-  const usertReitsItem = userReits[0];
+  const usertReitsItem = userReits;
   const allReits = convertArrayToObject(reits, 'papel');
 
   const commonStockKeys = Object.keys(allStocks).filter(item => {

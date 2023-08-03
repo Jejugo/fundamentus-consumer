@@ -7,6 +7,7 @@ const redisClient = redis.client;
 export const getData = async (
   redisKey,
   firebaseCollection,
+  userId,
   skipCache = false,
 ) => {
   if (!skipCache) {
@@ -22,12 +23,20 @@ export const getData = async (
     }
   }
 
-  const collectionRef = Firestore.collection(firebaseCollection);
-  const snapshot = await collectionRef.get();
-  const items: any = [];
-  snapshot.forEach((doc: any) => {
-    items.push(doc.data());
-  });
+  let items = {} as FirebaseFirestore.DocumentData | undefined;
+  const docRef = Firestore.collection(firebaseCollection).doc(userId);
+  await docRef
+    .get()
+    .then(docSnap => {
+      if (docSnap.exists) {
+        items = docSnap.data();
+      } else {
+        console.log('No such document!');
+      }
+    })
+    .catch(error => {
+      console.error('Error getting document:', error);
+    });
 
   redisClient.set(redisKey, JSON.stringify(items), 'EX', 60 * 60 * 24); // cache for 24 hours
 

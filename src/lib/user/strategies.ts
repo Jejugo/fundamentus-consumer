@@ -1,9 +1,10 @@
 import { getData } from '../../commons/request';
 
-export const getStrategies = async () => {
+export const getStrategies = async (userId: string) => {
   const { items, fromRedis } = await getData(
     'user:strategy',
     'userStrategy',
+    userId,
     true,
   );
 

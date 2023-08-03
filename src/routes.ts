@@ -1,5 +1,6 @@
 import Router from 'koa-router';
 import cors from '@koa/cors';
+import { bodyParser } from '@koa/bodyparser';
 import {
   shares,
   health,
@@ -9,6 +10,12 @@ import {
   bonds,
   international,
 } from './services';
+
+const options = {
+  origin: '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'], // the allowed methods in your API
+  allowHeaders: '*',
+};
 
 const setRoutes = (router: Router<any, any>) => {
   router.get('/health', health.get);
@@ -28,21 +35,28 @@ const setRoutes = (router: Router<any, any>) => {
   router.get('/international/assets', international.getInternationalAssets);
   router.get('/international/sectors', international.getInternationalSectors);
 
-  router.get('/user/strategy', user.getStrategies);
-  router.get('/user/recommendation', user.getWalletRecommendation);
+  router.get('/user/strategy/:userId', user.getStrategies);
+  router.get('/user/recommendation/:userId', user.getWalletRecommendation);
+  router.post('/user/stocks/fundaments/:userId', user.setUserFundaments);
+  router.get('/user/stocks/fundaments', user.getUserFundaments);
   router.post('/sync/user/:id', user.userRecommendationUpdate);
 };
 
 const createRouter = () => {
   const router = new Router();
-  router.use(cors());
+  router.use(async (ctx, next) => {
+    console.log('Request Origin:', ctx.request.origin);
+    await next();
+  });
+  router.use(cors(options));
+  router.use(bodyParser());
+
   setRoutes(router);
 
   return router;
 };
 
 const appRouter = createRouter();
-appRouter.use(appRouter.routes()).use(appRouter.allowedMethods());
 
 export default {
   routes: () => appRouter.routes(),

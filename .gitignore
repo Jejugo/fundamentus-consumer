@@ -12,6 +12,9 @@
 # misc
 .DS_Store
 
+# dist
+dist
+
 # debug
 npm-debug.log*
 yarn-debug.log*
@@ -26,3 +29,6 @@ yarn-error.log*
 
 # tsconfig
 tsconfig.tsbuildinfo
+
+# pem files
+*.pem

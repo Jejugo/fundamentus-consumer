@@ -2,13 +2,12 @@
   "compilerOptions": {
     "target": "es6",
     "lib": ["es6"],
-    "module": "nodenext",
+    "module": "commonjs",
     "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "noEmit": true,
     "incremental": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -19,8 +18,9 @@
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "sourceMap": true,
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "outDir": "./dist"
   },
-  "include": ["src", "**/*.ts"],
+  "include": ["src", "server", "**/*.ts"],
   "exclude": ["node_modules"]
 }

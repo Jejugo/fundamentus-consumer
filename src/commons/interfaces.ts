@@ -104,7 +104,11 @@ interface IReitItem {
   'valorPatrimonial/cota': number;
 }
 
-type IUserStockItem = IStockItem & {
+export type IUserStockItem = IStockItem & {
+  quantity: string;
+};
+
+export type IUserReitItem = IReitItem & {
   quantity: string;
 };
 

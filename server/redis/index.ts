@@ -1,26 +1,23 @@
 import bluebird from 'bluebird';
 /* eslint-disable @typescript-eslint/no-var-requires */
-const redis = require('redis');
+import redis from 'redis';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let client: any;
+import REDIS_CONFIG from '../../configs';
 
 const createClient = () => {
-  const {
-    REDIS_HOST,
-    REDIS_PORT,
-    REDIS_DB,
-    REDIS_SCAN_COUNT,
-    REDIS_EXPIRE,
-    REDIS_PASSWORD,
-  } = require('../../configs');
   const redisConfig = {
-    host: REDIS_HOST,
-    port: REDIS_PORT,
-    password: REDIS_PASSWORD,
-    REDIS_DB,
-    REDIS_SCAN_COUNT,
-    REDIS_EXPIRE,
+    host: REDIS_CONFIG.REDIS_HOST,
+    port: REDIS_CONFIG.REDIS_PORT,
+    REDIS_DB: REDIS_CONFIG.REDIS_DB,
+    REDIS_SCAN_COUNT: REDIS_CONFIG.REDIS_SCAN_COUNT,
+    REDIS_EXPIRE: REDIS_CONFIG.REDIS_DB,
+    ...(REDIS_CONFIG.REDIS_PASSWORD
+      ? {
+          password: REDIS_CONFIG.REDIS_PASSWORD,
+        }
+      : {}),
   };
 
   bluebird.promisifyAll(redis.RedisClient.prototype);

@@ -57,13 +57,6 @@ export interface IFirebaseAddListAsObject {
   key?: string;
 }
 
-export interface IFirebaseAddListsAsObjectWithList {
-  collection: string;
-  id: string;
-  list: IStatement[];
-  key?: string;
-}
-
 export interface IFirebaseRemoveObjectKey {
   collection: string;
   id: string;

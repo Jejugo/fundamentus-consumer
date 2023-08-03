@@ -34,7 +34,7 @@ const assetScore = (
 interface IBuildAssetTableData {
   type: IAssetType;
   assets: IFirestoreGetAllUserAssets;
-  item: string;
+  item: keyof (IStockItem & IReitItem);
   recommendedPercentages: RecommendedPercentages;
   assetPoints: IWalletResistancePoints;
 }
@@ -48,12 +48,11 @@ export const buildAssetTableData = ({
 }: IBuildAssetTableData): ITableRow => {
   return {
     type,
-    cheapStockScore: assetScore(assets[item], type),
+    cheapStockScore: assetScore(assets[item] as any, type),
     symbol: assets[item].papel.toLowerCase(),
     asset: assets[item].nome,
     recommended: recommendedPercentages[item].percentage,
-    currentValue:
-      parseInt(assets[item].quantity) * parseFloat(assets[item].cotacao),
+    currentValue: parseInt(assets[item].quantity) * assets[item].cotacao,
     recommendedValue: 0,
     adjustment: '',
     grade: assetPoints[item],
