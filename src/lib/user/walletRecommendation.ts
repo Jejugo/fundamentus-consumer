@@ -3,7 +3,7 @@ import {
   convertArrayToObject,
   convertObjectKeysToList,
 } from '../../builders/arrays';
-import { IReitItem, IStockItem, IWalletResistancePoints } from '../interfaces';
+import { IWalletResistancePoints } from '../interfaces';
 import calculateAssetPoints from '../../builders/calculateAssetPoints';
 import calculateAssetPercentages from '../../builders/calculateAssetPercentages';
 import {
@@ -11,22 +11,22 @@ import {
   buildAssetTableDataNoStrategy,
 } from '../../builders/investTableData';
 import { columnsNames } from '../../const/investTableColumns';
-import { getData, setData } from '../../commons/request';
+import { getData, getDataById, setData } from '../../commons/request';
 import { RecommendedPercentages } from '../../commons/interfaces';
 import { calculatePercentage } from '../../commons/utils';
 
 const walletRecommendationCalls = userId => ({
-  getUserReits: () => getData('user:reits', 'userReits', userId, true),
-  getUserStocks: () => getData('user:stocks', 'userStocks', userId, true),
-  getUserBonds: () => getData('user:bonds', 'userBonds', userId, true),
+  getUserReits: () => getDataById('user:reits', 'userReits', userId, true),
+  getUserStocks: () => getDataById('user:stocks', 'userStocks', userId, true),
+  getUserBonds: () => getDataById('user:bonds', 'userBonds', userId, true),
   getUserInternational: () =>
-    getData('user:international', 'userInternational', userId, true),
+    getDataById('user:international', 'userInternational', userId, true),
   getStocksStrategy: () =>
-    getData('stocks:strategy', 'stocksStrategy', userId, true),
+    getDataById('stocks:strategy', 'stocksStrategy', userId, true),
   getReitsStrategy: () =>
-    getData('reits:strategy', 'reitsStrategy', userId, true),
+    getDataById('reits:strategy', 'reitsStrategy', userId, true),
   getUserGoals: async () => {
-    const data = await getData('user:goals', 'goals', userId, true);
+    const data = await getDataById('user:goals', 'goals', userId, true);
     return data.items;
   },
 });
@@ -358,24 +358,30 @@ export const getWalletRecommendation = async (
 };
 
 export const userRecommendationUpdate = async (userId: string) => {
-  const { items: userStocks } = await getData(
+  const { items: userStocks } = await getDataById(
     'user:stocks',
     'userStocks',
+    userId,
     true,
   );
   const { items: stocks } = await getData('stocks', 'stocks', true);
 
-  const { items: userReits } = await getData('user:reits', 'userReits', true);
+  const { items: userReits } = await getDataById(
+    'user:reits',
+    'userReits',
+    userId,
+    true,
+  );
   const { items: reits } = await getData('reits', 'reits', true);
 
-  const usertStocksItem = userStocks;
+  const userStocksItem = userStocks;
   const allStocks = convertArrayToObject(stocks, 'papel');
 
   const usertReitsItem = userReits;
   const allReits = convertArrayToObject(reits, 'papel');
 
   const commonStockKeys = Object.keys(allStocks).filter(item => {
-    return item in usertStocksItem;
+    return item in userStocksItem;
   });
 
   const commonReitKeys = Object.keys(allReits).filter(item => {
@@ -387,7 +393,7 @@ export const userRecommendationUpdate = async (userId: string) => {
       ...acc,
       [curr]: {
         ...allStocks[curr],
-        quantity: usertStocksItem[curr].quantity,
+        quantity: userStocksItem[curr].quantity,
       },
     }),
     {},
@@ -403,6 +409,8 @@ export const userRecommendationUpdate = async (userId: string) => {
     }),
     {},
   );
+
+  console.log('finalStocks: ', finalStockValue);
 
   await Promise.all([
     await setData('userStocks', finalStockValue, userId),

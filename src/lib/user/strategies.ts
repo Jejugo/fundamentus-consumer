@@ -1,7 +1,7 @@
-import { getData } from '../../commons/request';
+import { getDataById } from '../../commons/request';
 
 export const getStrategies = async (userId: string) => {
-  const { items, fromRedis } = await getData(
+  const { items, fromRedis } = await getDataById(
     'user:strategy',
     'userStrategy',
     userId,
