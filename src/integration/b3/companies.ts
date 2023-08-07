@@ -1,5 +1,6 @@
 import { Builder, Browser, By } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
+import logger from '../../../server/logger';
 
 const b3URL = 'https://sistemaswebb3-listados.b3.com.br/indexPage/day/IBOV';
 
@@ -22,7 +23,7 @@ export const getCompaniesTypesFromB3 = async (): Promise<void> => {
     .forBrowser(Browser.CHROME)
     .setChromeOptions(chromeOptions)
     .build()
-    .catch(err => console.error('Error: ', err));
+    .catch(err => logger.error(`Error: ${err.message}`));
 
   try {
     await driver.get(b3URL);
@@ -38,12 +39,12 @@ export const getCompaniesTypesFromB3 = async (): Promise<void> => {
       )
       .click();
   } catch (err) {
-    console.error(
-      'There was an error while executing Selenium Webdriver: ',
-      err,
-    );
+    if (err instanceof Error)
+      logger.error(
+        `There was an error while executing Selenium Webdriver: ${err.message}`,
+      );
   } finally {
-    console.info('Selenium successfully executed!');
+    logger.info('Selenium successfully executed!');
     await driver.quit();
   }
 };

@@ -1,6 +1,7 @@
 import csvtojsonV2 from 'csvtojson/v2';
 
 import { ICSVFormattedHeader, ICSVHeader, ICSVStockData } from '../interfaces';
+import logger from '../../../server/logger';
 
 const SHEET_PATH =
   '/Users/jeffgoes/Documents/SoftwareDevelopment/Projects/fundamentus-consumer/public';
@@ -33,7 +34,9 @@ export const getDataFromCSV = async (
       ) as ICSVStockData;
     });
   } catch (err) {
-    console.error('Error: ', err);
+    if (err instanceof Error) logger.error(`Error: ${err.message}`);
+    logger.error(`Error: ${err}`);
+
     return [];
   }
 };

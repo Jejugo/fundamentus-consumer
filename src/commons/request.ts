@@ -1,6 +1,7 @@
 import { promisify } from 'util';
 import redis from '../../server/redis';
 import Firestore from '../firebase';
+import logger from '../../server/logger';
 
 const redisClient = redis.client;
 
@@ -31,11 +32,11 @@ export const getDataById = async (
       if (docSnap.exists) {
         items = docSnap.data();
       } else {
-        console.log('No such document!');
+        logger.error(`Document does not exist for id: ${userId}`);
       }
     })
     .catch(error => {
-      console.error('Error getting document:', error);
+      logger.error(`Error getting document: ${error.message}`);
     });
 
   redisClient.set(redisKey, JSON.stringify(items), 'EX', 60 * 60 * 24); // cache for 24 hours

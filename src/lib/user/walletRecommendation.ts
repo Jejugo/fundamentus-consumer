@@ -410,8 +410,6 @@ export const userRecommendationUpdate = async (userId: string) => {
     {},
   );
 
-  console.log('finalStocks: ', finalStockValue);
-
   await Promise.all([
     await setData('userStocks', finalStockValue, userId),
     await setData('userReits', finalReitValue, userId),

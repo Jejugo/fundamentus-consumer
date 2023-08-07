@@ -1,3 +1,4 @@
+import logger from '../../server/logger';
 import redis from '../../server/redis';
 const redisClient = redis.client;
 
@@ -29,9 +30,7 @@ export const getAllKeysFromFolder = async ({
   );
 
   const newCursorPosition = parseInt(cursorPosition);
-  // console.info(`Fetching keys for query: ${query} in folder: ${folder}`, {
-  //   scope: 'Redis',
-  // });
+
   if (newCursorPosition === 0) return [...keys, ...totalKeys];
   return getAllKeysFromFolder({
     folder,
@@ -54,9 +53,7 @@ export const getKeyValue = (folder: string, key: string): Promise<any> =>
   new Promise((resolve, reject) => {
     redisClient.get(`${folder}:${key}`, (err: any, value: any) => {
       if (err) {
-        console.error('Redis get an error on get method', key, {
-          scope: 'Redis',
-        });
+        logger.error(`Redis get an error on get method ${key}`);
         return reject(err);
       }
       // console.info(`Fetching values for ${folder}:${key}`, { scope: 'Redis' });

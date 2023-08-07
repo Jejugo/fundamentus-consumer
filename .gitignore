@@ -32,3 +32,6 @@ tsconfig.tsbuildinfo
 
 # pem files
 *.pem
+
+# log files
+*.log

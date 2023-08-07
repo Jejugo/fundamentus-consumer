@@ -13,8 +13,6 @@ import {
 import * as admin from 'firebase-admin';
 
 const verifyFirebaseToken = async (ctx, next) => {
-  console.log('bateu');
-
   const authHeader = ctx.headers.authorization;
   if (!authHeader) {
     ctx.status = 401;

@@ -5,6 +5,7 @@ import redis from 'redis';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let client: any;
 import REDIS_CONFIG from '../../configs';
+import logger from '../logger';
 
 const createClient = () => {
   const redisConfig = {
@@ -23,10 +24,10 @@ const createClient = () => {
   bluebird.promisifyAll(redis.RedisClient.prototype);
   bluebird.promisifyAll(redis.Multi.prototype);
 
-  console.info('starting Redis...', JSON.stringify(redisConfig));
+  logger.info(`starting Redis...${JSON.stringify(redisConfig)}`);
   client = redis.createClient(redisConfig);
   client.on('error', (err: Error) =>
-    console.error('error starting redis: ', err),
+    logger.error(`error starting redis: ${err.message}`),
   );
 
   return client;
