@@ -2,8 +2,8 @@ import Koa from 'koa';
 import * as user from '../lib/user';
 
 export const getStrategies = async (ctx: Koa.Context) => {
-  const { userId } = ctx.params;
-  if (userId) ctx.body = await user.getStrategies(userId);
+  const { uid } = ctx.state.user;
+  if (uid) ctx.body = await user.getStrategies(uid);
   else
     ctx.body = {
       status: 401,
@@ -12,8 +12,8 @@ export const getStrategies = async (ctx: Koa.Context) => {
 };
 
 export const getWalletRecommendation = async (ctx: Koa.Context) => {
-  const { userId } = ctx.params;
-  if (userId) ctx.body = await user.getWalletRecommendation(userId);
+  const { uid } = ctx.state.user;
+  if (uid) ctx.body = await user.getWalletRecommendation(uid);
   else
     ctx.body = {
       status: 401,
@@ -22,8 +22,8 @@ export const getWalletRecommendation = async (ctx: Koa.Context) => {
 };
 
 export const userRecommendationUpdate = async (ctx: Koa.Context) => {
-  const { id } = ctx.params;
-  ctx.body = await user.userRecommendationUpdate(id);
+  const { uid } = ctx.state.user;
+  ctx.body = await user.userRecommendationUpdate(uid);
 };
 
 export const getUserFundaments = async (ctx: Koa.Context) => {
@@ -32,7 +32,7 @@ export const getUserFundaments = async (ctx: Koa.Context) => {
 
 export const setUserFundaments = async (ctx: Koa.Context) => {
   const { body } = ctx.request;
-  const { userId } = ctx.params;
+  const { uid } = ctx.state.user;
 
-  ctx.body = await user.setUserFundaments(body, userId);
+  ctx.body = await user.setUserFundaments(body, uid);
 };

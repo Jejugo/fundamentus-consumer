@@ -58,7 +58,7 @@ jobs:
             echo "AUTH_PROVIDER_X509_CERT_URL=${{ secrets.FIREBASE_AUTH_PROVIDER_X509_CERT_URL }}" >> /home/ec2-user/server/dist/.env
             echo "CLIENT_X509_CERT_URL=${{ secrets.FIREBASE_CLIENT_X509_CERT_URL }}" >> /home/ec2-user/server/dist/.env
             yarn install
-            # npx pm2 start yarn --interpreter bash --name my-app -- start
+            npx pm2 start yarn --interpreter bash --name my-app -- start
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
