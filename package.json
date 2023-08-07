@@ -5,7 +5,7 @@
   "main": "server/index.ts",
   "scripts": {
     "start": "cp configs/config.prod.js configs/index.js; node server/index.js",
-    "dev": "cp configs/config.dev.ts configs/index.ts; nodemon server/index.ts",
+    "dev": "cp configs/config.local.ts configs/index.ts; nodemon server/index.ts",
     "build": "tsc",
     "postbuild": "cp package.json dist/package.json",
     "start:debug": "node --inspect server/index.ts",

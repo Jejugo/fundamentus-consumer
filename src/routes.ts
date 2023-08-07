@@ -45,13 +45,6 @@ const setRoutes = (router: Router<any, any>) => {
 
 const createRouter = () => {
   const router = new Router();
-  router.use(async (ctx, next) => {
-    console.log('Request Origin:', ctx.request.origin);
-    console.log('Request URL:', ctx.request.url);
-    console.log('Request Method:', ctx.request.method);
-    console.log('Query Parameters:', ctx.request.query);
-    await next();
-  });
   router.use(cors(options));
   router.use(bodyParser());
 
