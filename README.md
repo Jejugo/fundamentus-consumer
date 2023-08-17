@@ -25,7 +25,3 @@ Server side application that retrieves data from fundamentus stockshare informat
 - Stop cloudwatch agent: `sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a stop`
 - Start cloudwatch agent: `sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a start`
 - Check configurations: `cat amazon-cloudwatch-agent.json`
-
-
-/opt/aws/amazon-cloudwatch-agent/bin/config.json
-/opt/aws/amazon-cloudwatch-agent/etc/
