@@ -21,6 +21,8 @@ const walletRecommendationCalls = userId => ({
   getUserBonds: () => getDataById('user:bonds', 'userBonds', userId, true),
   getUserInternational: () =>
     getDataById('user:international', 'userInternational', userId, true),
+  getUserCrypto: () =>
+    getDataById('user:international', 'userCrypto', userId, true),
   getStocksStrategy: () =>
     getDataById('stocks:strategy', 'stocksStrategy', userId, true),
   getReitsStrategy: () =>
@@ -32,10 +34,11 @@ const walletRecommendationCalls = userId => ({
 });
 
 const assetNameMap = {
-  reits: 'fundos imobiliarios',
+  reits: 'fundos imobiliários',
   stocks: 'ações',
   bonds: 'renda fixa',
   international: 'internacional',
+  crypto: 'crypto',
 };
 
 const getUserStrategies = (assets: any, assetStrategy: any) =>
@@ -61,6 +64,10 @@ const getWalletData = (userId: string) => ({
     assetStrategy: null,
   },
   international: {
+    asset: walletRecommendationCalls(userId).getUserInternational,
+    assetStrategy: null,
+  },
+  crypto: {
     asset: walletRecommendationCalls(userId).getUserInternational,
     assetStrategy: null,
   },
@@ -125,7 +132,6 @@ const getUserAssetStrategies = async (
     const assets = await getWalletData(userId)[assetType].asset();
 
     const { items: assetItems } = assets;
-
     return {
       assetItems,
       userAssetStrategies: {},
@@ -222,8 +228,9 @@ const calculateResultByAsset = async ({
         ...result,
         [assetType]: {
           percentage:
-            goals.overview.find(item => item.name === assetNameMap[assetType])
-              .value / 100,
+            goals.overview.find(
+              item => item.name.toLowerCase() === assetNameMap[assetType],
+            ).value / 100,
           tableData,
         },
       };
@@ -232,8 +239,9 @@ const calculateResultByAsset = async ({
     // in case asset has no strategies set
     else {
       const assetTypeOverallPercentage =
-        goals.overview.find(item => item.name === assetNameMap[assetType])
-          .value / 100;
+        goals.overview.find(
+          item => item.name.toLowerCase() === assetNameMap[assetType],
+        ).value / 100;
 
       result = {
         ...result,
@@ -244,8 +252,10 @@ const calculateResultByAsset = async ({
               [item]: {
                 name: item,
                 percentage:
-                  (goals[assetType].find((item2: any) => item2?.name === item)
-                    ?.value as number) || 0,
+                  (goals[assetType].find(
+                    (item2: any) =>
+                      item2?.name.toLowerCase() === item.toLowerCase(),
+                  )?.value as number) || 0,
                 points: 0,
               },
             };
@@ -304,57 +314,66 @@ interface IGetWalletRecommendationResponse {
   };
 }
 
-export const getWalletRecommendation = async (
-  userId: string,
-): Promise<IGetWalletRecommendationResponse> => {
-  const [goals] = await Promise.all([
-    walletRecommendationCalls(userId).getUserGoals(),
-  ]);
+export const getWalletRecommendation = async (userId: string): Promise<any> => {
+  try {
+    const [goals] = await Promise.all([
+      walletRecommendationCalls(userId).getUserGoals(),
+    ]);
 
-  const assetTypes: Partial<IAssetType>[] = Object.keys(goals)
-    .map(asset => asset)
-    .filter(asset => asset !== 'overview') as Partial<IAssetType>[];
+    const assetTypes: Partial<IAssetType>[] = Object.keys(goals)
+      .map(asset => asset)
+      .filter(
+        asset => asset !== 'overview' && asset !== 'crypto',
+      ) as Partial<IAssetType>[];
 
-  const {
-    result: resultByAsset,
-    recommendedPercentages,
-    allAssets,
-  } = await calculateResultByAsset({
-    assetTypes,
-    goals,
-    userId,
-  });
-
-  const totalInvested = Object.keys(resultByAsset).reduce((acc, curr) => {
-    return (
-      acc +
-      resultByAsset[curr].tableData.reduce((acc, curr) => {
-        return acc + curr.currentValue;
-      }, 0)
-    );
-  }, 0);
-
-  const resultItems = assetTypes.reduce((acc: any, type: any) => {
-    acc[type] = buildAssetResult({
-      assetType: type,
-      totalInvested,
-      goals,
+    const {
       result: resultByAsset,
       recommendedPercentages,
       allAssets,
+    } = await calculateResultByAsset({
+      assetTypes,
+      goals,
+      userId,
     });
-    return acc;
-  }, {});
 
-  return {
-    status: 200,
-    message: `Data retrieved successfully`,
-    items: {
-      totalInvested,
-      columnsNames,
-      ...resultItems,
-    },
-  };
+    const totalInvested = Object.keys(resultByAsset).reduce((acc, curr) => {
+      return (
+        acc +
+        resultByAsset[curr].tableData.reduce((acc, curr) => {
+          return acc + curr.currentValue;
+        }, 0)
+      );
+    }, 0);
+
+    const resultItems = assetTypes.reduce((acc: any, type: any) => {
+      acc[type] = buildAssetResult({
+        assetType: type,
+        totalInvested,
+        goals,
+        result: resultByAsset,
+        recommendedPercentages,
+        allAssets,
+      });
+      return acc;
+    }, {});
+
+    return {
+      status: 200,
+      message: `Data retrieved successfully`,
+      items: {
+        totalInvested,
+        columnsNames,
+        ...resultItems,
+      },
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      status: 500,
+      message: `There was an error when processing wallet balancing: ${err}`,
+    };
+  }
 };
 
 export const userRecommendationUpdate = async (userId: string) => {

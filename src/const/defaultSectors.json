@@ -1,0 +1,122 @@
+{
+  "stocks": [],
+  "reits": [],
+  "bonds": [
+    {
+      "id": "1296ec7e-3e99-4104-b8c4-4d55e68cbb9e",
+      "name": "Tesouro Direto",
+      "default": true
+    },
+    {
+      "id": "69ed8bed-e2fc-48d4-a7b2-6e585263a5ef",
+      "name": "CDB",
+      "default": true
+    },
+    {
+      "id": "c76281ee-360b-415f-948c-bd80af7c0d1b",
+      "name": "LCI",
+      "default": true
+    },
+    {
+      "id": "abd2ab88-2c51-496b-b2b7-f3307a577c79",
+      "name": "LCA",
+      "default": true
+    },
+    {
+      "id": "9db8af7f-d68f-43a6-998d-489515aebda0",
+      "name": "CRI",
+      "default": true
+    },
+    {
+      "id": "a6f54533-6320-4620-ba08-bd2c3211ad28",
+      "name": "CRA",
+      "default": true
+    },
+    {
+      "id": "c0459a94-4d10-4e17-b334-6041e2de3bea",
+      "name": "Letra Financeira",
+      "default": true
+    },
+    {
+      "id": "2638252e-8936-405c-9e7b-4bbdffb6e29d",
+      "name": "Debentures",
+      "default": true
+    }
+  ],
+  "international": [
+    {
+      "id": "b85cc114-a4e1-4cb5-a381-d53ca9cf3572",
+      "name": "Stocks",
+      "default": true
+    },
+    {
+      "id": "a3752a64-1e2f-4ad8-b315-565dab8eb02b",
+      "name": "Reits",
+      "default": true
+    },
+    {
+      "id": "e4c5fee6-1910-4600-94ed-83c834b219b8",
+      "name": "Technology ETF",
+      "default": true
+    },
+    {
+      "id": "e318ae6f-992b-40b1-aad3-7c4b992985f5",
+      "name": "Growth ETF",
+      "default": true
+    },
+    {
+      "id": "f0d41250-4f95-485e-b417-8e64cce9b0c8",
+      "name": "Dividends ETF",
+      "default": true
+    },
+    {
+      "id": "8d8da19c-7b9a-43f8-b33d-a54b041209e9",
+      "name": "S&P ETF",
+      "default": true
+    }
+  ],
+  "crypto": [
+    {
+      "id": "615b817c-0c92-4f01-8789-f9c1d08b30f8",
+      "name": "Bitcoin",
+      "default": true
+    },
+    {
+      "id": "68c7cf26-38ca-472c-8f2c-5fdb9bd210d2",
+      "name": "Ethereum",
+      "default": true
+    },
+    {
+      "id": "c33828a0-a0d2-4e54-8420-f56f8b663aed",
+      "name": "Litecoin",
+      "default": true
+    }
+  ],
+  "overview": [
+    {
+      "id": "45c335ae-3e5d-437f-8bf6-047223abb851",
+      "name": "Ações",
+      "default": true
+    },
+    {
+      "id": "5ca1609c-78a8-4368-a3fb-861d1d9d4c9f",
+      "name": "Fundos Imobiliários",
+      "default": true
+    },
+    {
+      "id": "ba000678-6156-405d-8d92-d358df1efb0a",
+      "name": "Renda Fixa",
+      "default": true
+    },
+    {
+      "id": "f23bfbed-9d2c-49dd-8eb9-351600dec3c0",
+      "name": "Internacional",
+      "default": true
+    },
+    {
+      "id": "5e93c283-61a4-4391-b126-d107c5cfb844",
+      "name": "Crypto",
+      "default": true
+    }
+  ]
+}

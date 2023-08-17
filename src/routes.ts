@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import Router from 'koa-router';
-import { bodyParser } from '@koa/bodyparser';
+
 import {
   shares,
   health,
@@ -35,6 +35,7 @@ const verifyFirebaseToken = async (ctx, next) => {
 
 const setRoutes = (router: Router<any, any>) => {
   router.get('/health', health.get);
+
   router.get('/assets/all/sectors', verifyFirebaseToken, assets.getAllSectors);
 
   router.get('/shares', verifyFirebaseToken, shares.getShares);
@@ -48,11 +49,7 @@ const setRoutes = (router: Router<any, any>) => {
   router.get('/bonds/sectors', verifyFirebaseToken, bonds.getBondsSectors);
   router.delete('/bonds/:symbol', verifyFirebaseToken, bonds.deleteBond);
 
-  router.get(
-    '/international/assets',
-    verifyFirebaseToken,
-    international.getInternationalAssets,
-  );
+  router.get('/international/assets', verifyFirebaseToken, international.getInternationalAssets);
   router.get(
     '/international/sectors',
     verifyFirebaseToken,
@@ -66,7 +63,7 @@ const setRoutes = (router: Router<any, any>) => {
     user.getWalletRecommendation,
   );
   router.post(
-    '/user/stocks/fundaments',
+    '`/user/stocks/fundaments`',
     verifyFirebaseToken,
     user.setUserFundaments,
   );
@@ -75,6 +72,8 @@ const setRoutes = (router: Router<any, any>) => {
     verifyFirebaseToken,
     user.getUserFundaments,
   );
+  router.post('/user/:assetType/sectors', verifyFirebaseToken, user.setUserAssetSectors);
+  router.delete('/user/:assetType/sectors/:itemId', verifyFirebaseToken, user.deleteUserAssetSector);
   router.post(
     '/sync/user/:id',
     verifyFirebaseToken,
@@ -84,8 +83,6 @@ const setRoutes = (router: Router<any, any>) => {
 
 const createRouter = () => {
   const router = new Router();
-
-  router.use(bodyParser());
 
   setRoutes(router);
 
