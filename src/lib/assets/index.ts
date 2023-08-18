@@ -5,18 +5,13 @@ import { getShares } from '../shares';
 import { getDataById } from '../../commons/request';
 import defaultSectors from '../../const/defaultSectors.json';
 import { v4 as uuidv4 } from 'uuid';
+import { uniqueArray } from '../../builders/arrays';
 
 interface Sector {
   id: number;
   name: string;
   default: boolean;
 }
-
-const uniqueArray = array =>
-  array.filter(
-    (item, index, self) =>
-      index === self.findIndex(obj => obj.name === item.name),
-  );
 
 export const getAllSectors = async (uid: string) => {
   try {
@@ -61,9 +56,9 @@ export const getAllSectors = async (uid: string) => {
       ),
     ]);
 
-    const cryptoSectors = defaultSectors.crypto;
-    const internationalSectors = defaultSectors.international;
-    const bondSectors = defaultSectors.bonds;
+    const defaultCryptoSectors = defaultSectors.crypto;
+    const defaultInternationalSectors = defaultSectors.international;
+    const defaultBondSectors = defaultSectors.bonds;
     const overviewSectors = defaultSectors.overview;
 
     return {
@@ -74,15 +69,15 @@ export const getAllSectors = async (uid: string) => {
         reits: reitSectors,
         bonds: uniqueArray([
           ...(userSectorsBonds.items?.values || []),
-          ...bondSectors,
+          ...defaultBondSectors,
         ]),
         international: uniqueArray([
           ...(userSectorsInternational.items?.values || []),
-          ...internationalSectors,
+          ...defaultInternationalSectors,
         ]),
         crypto: uniqueArray([
           ...(userSectorsCrypto.items?.values || []),
-          ...cryptoSectors,
+          ...defaultCryptoSectors,
         ]),
         overview: uniqueArray([
           ...(userSectorsOverview.items?.values || []),

@@ -90,10 +90,8 @@ const calculatePositivePercentages = (
 export default (
   resistancePoints: IWalletResistancePoints,
 ): AssetPercentage[] => {
-  // get all Positive assets
   const positiveAssets = getPositiveAssets(resistancePoints);
 
-  // get all Negative assets
   const negativeAssets = getNegativeAssets(resistancePoints);
 
   // Set all negative assets to 1%

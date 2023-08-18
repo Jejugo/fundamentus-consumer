@@ -9,6 +9,7 @@ import {
   assets,
   bonds,
   international,
+  crypto
 } from './services';
 import * as admin from 'firebase-admin';
 
@@ -49,12 +50,17 @@ const setRoutes = (router: Router<any, any>) => {
   router.get('/bonds/sectors', verifyFirebaseToken, bonds.getBondsSectors);
   router.delete('/bonds/:symbol', verifyFirebaseToken, bonds.deleteBond);
 
-  router.get('/international/assets', verifyFirebaseToken, international.getInternationalAssets);
+  router.get(
+    '/international/assets',
+    verifyFirebaseToken,
+    international.getInternationalAssets,
+  );
   router.get(
     '/international/sectors',
     verifyFirebaseToken,
     international.getInternationalSectors,
   );
+  router.get('/crypto/sectors', verifyFirebaseToken, crypto.getCryptoSectors);
 
   router.get('/user/strategy', verifyFirebaseToken, user.getStrategies);
   router.get(
@@ -72,8 +78,16 @@ const setRoutes = (router: Router<any, any>) => {
     verifyFirebaseToken,
     user.getUserFundaments,
   );
-  router.post('/user/:assetType/sectors', verifyFirebaseToken, user.setUserAssetSectors);
-  router.delete('/user/:assetType/sectors/:itemId', verifyFirebaseToken, user.deleteUserAssetSector);
+  router.post(
+    '/user/:assetType/sectors',
+    verifyFirebaseToken,
+    user.setUserAssetSectors,
+  );
+  router.delete(
+    '/user/:assetType/sectors/:itemId',
+    verifyFirebaseToken,
+    user.deleteUserAssetSector,
+  );
   router.post(
     '/sync/user/:id',
     verifyFirebaseToken,
