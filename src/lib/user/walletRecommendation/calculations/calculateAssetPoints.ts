@@ -3,6 +3,9 @@ import { IStatement, IWalletResistancePoints } from 'commons/interfaces';
 interface IAssetStrategy {
   [key: string]: IStatement[];
 }
+
+const MINIUM_SCORE = -1;
+
 /**
  * Calculates the resistance points of an asset strategy.
  * Run through a list of assets and their statements and calculates the resistance points  of each asset.
@@ -22,7 +25,7 @@ export default (
           (acc: number, statement: IStatement): number => {
             if (statement.checked) return acc + 1 * parseInt(statement.weight);
             else if (!statement.checked)
-              return acc + -1 * parseInt(statement.weight);
+              return acc + MINIUM_SCORE * parseInt(statement.weight);
 
             return acc + 0;
           },

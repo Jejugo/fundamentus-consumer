@@ -5,3 +5,4 @@ export * as user from './user';
 export * as assets from './assets';
 export * as bonds from './bonds';
 export * as international from './international';
+export * as crypto from './crypto';
