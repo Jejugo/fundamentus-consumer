@@ -53,10 +53,10 @@ export const buildAssetTableData = ({
     asset: assets[item].nome,
     recommended: recommendedPercentages[item].percentage,
     currentValue: parseInt(assets[item].quantity) * assets[item].cotacao,
-    recommendedValue: 0,
-    adjustment: '',
+    recommendedValue: 0, // still unset
+    adjustment: '', // still unset
     grade: assetPoints[item],
-    total: '',
+    total: '', // still unset
     quantity: parseInt(assets[item].quantity),
   };
 };
@@ -81,10 +81,10 @@ export const buildAssetTableDataNoStrategy = ({
     asset: item.toLowerCase(),
     recommended: recommendedPercentages[item].percentage,
     currentValue: assets[item].value,
-    recommendedValue: 0,
-    adjustment: '',
-    grade: 0,
-    total: '',
-    quantity: 0,
+    recommendedValue: 0, // still unset
+    adjustment: '', // sill unseet
+    grade: 0, // no grade for no strategy
+    total: '', // still unset
+    quantity: 0, // no quantity for no strategy
   };
 };
