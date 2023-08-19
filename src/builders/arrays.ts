@@ -36,3 +36,9 @@ export const convertObjectKeysToList = <T extends RandomObject<T>>(obj: T) =>
       [key]: Object.values(obj[key]).map((item: any) => item),
     };
   }, {});
+
+export const uniqueArray = array =>
+  array.filter(
+    (item, index, self) =>
+      index === self.findIndex(obj => obj.name === item.name),
+  );

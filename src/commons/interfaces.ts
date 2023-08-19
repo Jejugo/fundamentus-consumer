@@ -4,7 +4,13 @@ export interface IGetResponse<T> {
   items?: T;
 }
 
-export type IAssetType = 'stocks' | 'reits' | 'international' | 'bonds';
+export type IAssetType =
+  | 'stocks'
+  | 'reits'
+  | 'international'
+  | 'bonds'
+  | 'crypto'
+  | 'overview';
 
 interface IFundamentusStockItem {
   Papel: string;

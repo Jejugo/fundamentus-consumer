@@ -1,9 +1,9 @@
 import Koa from 'koa';
-import * as user from '../lib/user';
+import * as lib from '../lib/user';
 
 export const getStrategies = async (ctx: Koa.Context) => {
   const { uid } = ctx.state.user;
-  if (uid) ctx.body = await user.getStrategies(uid);
+  if (uid) ctx.body = await lib.getStrategies(uid);
   else
     ctx.body = {
       status: 401,
@@ -13,8 +13,11 @@ export const getStrategies = async (ctx: Koa.Context) => {
 
 export const getWalletRecommendation = async (ctx: Koa.Context) => {
   const { uid } = ctx.state.user;
-  if (uid) ctx.body = await user.getWalletRecommendation(uid);
-  else
+
+  if (uid) {
+    console.log('calling lib.userRecommendationUpdate');
+    ctx.body = await lib.getWalletRecommendation(uid);
+  } else
     ctx.body = {
       status: 401,
       message: `Unauthorized access`,
@@ -23,8 +26,9 @@ export const getWalletRecommendation = async (ctx: Koa.Context) => {
 
 export const userRecommendationUpdate = async (ctx: Koa.Context) => {
   const { uid } = ctx.state.user;
-  if (uid) ctx.body = await user.userRecommendationUpdate(uid);
-  else
+  if (uid) {
+    ctx.body = await lib.userRecommendationUpdate(uid);
+  } else
     ctx.body = {
       status: 401,
       message: `Unauthorized access`,
@@ -33,7 +37,7 @@ export const userRecommendationUpdate = async (ctx: Koa.Context) => {
 
 export const getUserFundaments = async (ctx: Koa.Context) => {
   const { uid } = ctx.state.user;
-  if (uid) ctx.body = ctx.body = await user.getUserFundaments();
+  if (uid) ctx.body = ctx.body = await lib.getUserFundaments();
   else
     ctx.body = {
       status: 401,
@@ -45,7 +49,7 @@ export const setUserFundaments = async (ctx: Koa.Context) => {
   const { body } = ctx.request;
   const { uid } = ctx.state.user;
 
-  ctx.body = await user.setUserFundaments(body, uid);
+  ctx.body = await lib.setUserFundaments(body, uid);
 };
 
 export const setUserAssetSectors = async (ctx: Koa.Context) => {
@@ -55,7 +59,7 @@ export const setUserAssetSectors = async (ctx: Koa.Context) => {
 
   if (uid && body) {
     const { item } = JSON.parse(body);
-    ctx.body = await user.setAssetTypeSectors(uid, item, assetType);
+    ctx.body = await lib.setAssetTypeSectors(uid, item, assetType);
   } else
     ctx.body = {
       status: 401,
@@ -68,7 +72,7 @@ export const deleteUserAssetSector = async (ctx: Koa.Context) => {
   const { itemId, assetType } = ctx.params;
 
   if (uid) {
-    ctx.body = await user.deleteUserAssetSector(uid, itemId, assetType);
+    ctx.body = await lib.deleteUserAssetSector(uid, itemId, assetType);
   } else
     ctx.body = {
       status: 401,

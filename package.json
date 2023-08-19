@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cp configs/config.prod.js configs/index.js && NODE_ENV=production node server/index.js",
     "dev": "cp configs/config.local.ts configs/index.ts && NODE_ENV=development nodemon server/index.ts",
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "postbuild": "cp package.json dist/package.json",
     "start:debug": "node --inspect server/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
