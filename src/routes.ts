@@ -38,9 +38,10 @@ const setRoutes = (router: Router<any, any>) => {
   router.get('/health', health.get);
 
   router.get('/assets/all/sectors', verifyFirebaseToken, assets.getAllSectors);
-
+  router.delete('/assets/:assetType/:symbol', verifyFirebaseToken, assets.deleteAsset)
   router.get('/shares', verifyFirebaseToken, shares.getShares);
   router.get('/shares/sectors', verifyFirebaseToken, shares.getSharesSectors);
+  
   router.delete('/shares/:symbol', verifyFirebaseToken, shares.deleteShare);
 
   router.get('/reits', verifyFirebaseToken, reits.getReits);

@@ -2,7 +2,7 @@ import { IReitItem, IStockItem } from '../interfaces';
 
 import { getReits } from '../reits';
 import { getShares } from '../shares';
-import { getDataById } from '../../commons/request';
+import { getDataById, setData } from '../../commons/request';
 import defaultSectors from '../../const/defaultSectors.json';
 import { v4 as uuidv4 } from 'uuid';
 import { uniqueArray } from '../../builders/arrays';
@@ -91,4 +91,30 @@ export const getAllSectors = async (uid: string) => {
       message: 'There was an error processing the request: ' + err,
     };
   }
+};
+
+export const deleteAsset = async (
+  assetType: string,
+  symbol: string,
+  uid: string,
+) => {
+  const assetTypeUpperCase =
+    assetType.charAt(0).toUpperCase() + assetType.slice(1);
+
+  const { items } = await getDataById(
+    `user:${assetType}`,
+    `user${assetTypeUpperCase}`,
+    uid,
+    true,
+  );
+
+  const { [symbol]: _, ...rest } = items;
+
+  await setData(`user${assetTypeUpperCase}`, rest, uid);
+
+  return {
+    status: 200,
+    message: 'Item deleted',
+    data: rest,
+  };
 };
