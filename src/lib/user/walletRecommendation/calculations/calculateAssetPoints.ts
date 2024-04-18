@@ -8,7 +8,7 @@ const MINIUM_SCORE = -1;
 
 /**
  * Calculates the resistance points of an asset strategy.
- * Run through a list of assets and their statements and calculates the resistance points  of each asset.
+ * Run through a list of assets and their statements and calculates the resistance points for each asset.
  * If checked is true, the weight is added to the resistance points, if checked is false, the weight is subtracted from the resistance points.
  * @param {IAssetStrategy} assetsToInvest - Object containing the asset strategy to be analyzed.
  * @returns {Promise<IWalletResistancePoints>} - A promise that resolves to an object containing the resistance points of each asset.

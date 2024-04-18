@@ -23,11 +23,16 @@ export const getReits = async (optimized = false) => {
 
   const stocksRef = Firestore.collection('reits');
   const snapshot = await stocksRef.get();
-  const reits: IReitItem[] = [];
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  const reits: any[] = [];
 
-  snapshot.forEach((doc: any) => {
-    reits.push(doc.data());
-  });
+  snapshot.forEach(
+    (
+      doc: FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>,
+    ) => {
+      reits.push(doc.data());
+    },
+  );
 
   const items = optimized ? filter.basedOnValidation(reits) : reits;
 

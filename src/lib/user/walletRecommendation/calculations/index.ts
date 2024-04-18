@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IAssetType, ITableRow } from '../../../../commons/interfaces';
 
 import { IWalletResistancePoints } from '../../../interfaces';
@@ -185,7 +186,8 @@ export const calculateResultByAsset = async ({
       };
     }
 
-    // in case asset has no strategies set
+    // in case asset has no strategies set we want to divide equally by goal percentage.
+    // Example: INTERNATIONAL ETF has a total of 40%, if we have 4 ETFs we want to divide equally by 10%
     else {
       const percentageBasedOnGoals =
         goals.overview.find(

@@ -108,6 +108,7 @@ export const deleteAsset = async (
     true,
   );
 
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const { [symbol]: _, ...rest } = items;
 
   await setData(`user${assetTypeUpperCase}`, rest, uid);

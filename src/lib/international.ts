@@ -50,7 +50,7 @@ export const getInternationalAssets = async () => {
     };
   }
 
-  snapshot.forEach((doc: any) => {
+  snapshot.forEach(doc => {
     international.push(doc.data());
   });
 

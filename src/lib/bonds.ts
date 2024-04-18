@@ -33,7 +33,7 @@ export const getBonds = async () => {
     };
   }
 
-  snapshot.forEach((doc: any) => {
+  snapshot.forEach(doc => {
     bonds.push(doc.data());
   });
 

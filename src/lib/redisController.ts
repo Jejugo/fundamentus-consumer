@@ -14,20 +14,27 @@ export const getAllKeysFromFolder = async ({
   folder,
   query = '*',
   cursor = 0,
-  totalKeys = [],
+  totalKeys = [] as string[],
   exactMatch = false,
-}: any): Promise<any> => {
+}: {
+  folder: string;
+  query?: string;
+  cursor?: number;
+  totalKeys?: string[];
+  exactMatch?: boolean;
+}): Promise<string[]> => {
   const match = exactMatch
     ? query.replace(/ /g, '*')
     : `*${query.replace(/ /g, '*')}*`;
 
-  const [cursorPosition, keys] = await redisClient.scanAsync(
-    cursor,
-    'MATCH',
-    `${folder}:${match}`,
-    'COUNT',
-    MAX_SCAN_COUNT,
-  );
+  const [cursorPosition, keys]: [string, string[]] =
+    await redisClient.scanAsync(
+      cursor,
+      'MATCH',
+      `${folder}:${match}`,
+      'COUNT',
+      MAX_SCAN_COUNT,
+    );
 
   const newCursorPosition = parseInt(cursorPosition);
 
@@ -49,14 +56,15 @@ export const getAllKeysFromFolder = async ({
  * @param {String} folder
  * @param {String} key
  */
-export const getKeyValue = (folder: string, key: string): Promise<any> =>
+export const getKeyValue = (folder: string, key: string): Promise<JSON> =>
   new Promise((resolve, reject) => {
-    redisClient.get(`${folder}:${key}`, (err: any, value: any) => {
+    redisClient.get(`${folder}:${key}`, (err: string, value: string) => {
       if (err) {
         logger.error(`Redis get an error on get method ${key}`);
         return reject(err);
       }
-      // console.info(`Fetching values for ${folder}:${key}`, { scope: 'Redis' });
+
+      logger.info(`Fetching values for ${folder}:${key}`, { scope: 'Redis' });
       resolve(JSON.parse(value) || '');
     });
   });

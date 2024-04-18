@@ -1,3 +1,5 @@
+//TODO: THINK IF THIS FILE IS EVEN NECESSARY ANYMORE !!!!
+
 import { Builder, Browser, By } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 import logger from '../../../server/logger';
@@ -19,6 +21,7 @@ export const getCompaniesTypesFromB3 = async (): Promise<void> => {
     .headless()
     .windowSize(screen);
 
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const driver: any = await new Builder()
     .forBrowser(Browser.CHROME)
     .setChromeOptions(chromeOptions)

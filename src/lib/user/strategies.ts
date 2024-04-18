@@ -1,3 +1,4 @@
+import { sortArrayAlphabetically } from '../../builders/arrays';
 import { getDataById } from '../../commons/request';
 
 export const getStrategies = async (userId: string) => {
@@ -14,6 +15,11 @@ export const getStrategies = async (userId: string) => {
       fromRedis ? 'Redis' : 'Firebase'
     } collection userStrategy`,
     length: items.length,
-    items,
+    items: Object.keys(items).reduce((acc, curr) => {
+      return {
+        ...acc,
+        [curr]: sortArrayAlphabetically(items[curr], 'statement'),
+      };
+    }, {}),
   };
 };

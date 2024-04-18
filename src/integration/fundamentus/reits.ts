@@ -1,37 +1,33 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import {
-  IFundamentusReitsItem,
-  IFundamentusReitsTypes,
-} from '../../lib/interfaces';
+import { IFundamentusReitsItem } from '../../lib/interfaces';
 
 import fundamentusConfig from './';
-
 const buildFinalRow = (
   finalRow: IFundamentusReitsItem,
-  row: any,
+  row: string[],
 ): IFundamentusReitsItem => {
-  Object.keys(finalRow).forEach(
-    // @ts-ignore
-    (key: IFundamentusReitsTypes, index: number) => {
-      let rowValue = row[index];
+  Object.keys(finalRow).forEach((key: string, index: number) => {
+    let rowValue: string | number = row[index];
 
-      if (key === 'Segmento') {
-        finalRow[key] = key;
-      } else if (typeof rowValue === 'string') {
-        finalRow[key] = rowValue;
-      } else {
-        rowValue = parseFloat(rowValue.replace(/\./g, '').replace(',', '.'));
-        if (row[index].includes('%')) {
-          //tirar porcentagem, dividir por 100 e transofrmar em numero decimal
-          rowValue = row[index].split('%')[0].replace(/,/, '.');
+    if (key === 'Segmento') {
+      finalRow[key] = key;
+    } else if (typeof rowValue === 'string') {
+      finalRow[key] = rowValue;
+    } else {
+      rowValue = parseFloat(
+        (rowValue as string).replace(/\./g, '').replace(',', '.'),
+      );
 
-          rowValue = parseFloat((rowValue / 100).toFixed(4));
-        }
-        finalRow[key] = rowValue;
+      if (row[index].includes('%')) {
+        //tirar porcentagem, dividir por 100 e transofrmar em numero decimal
+        rowValue = row[index].split('%')[0].replace(/,/, '.');
+
+        rowValue = parseFloat((parseFloat(rowValue) / 100).toFixed(4));
       }
-    },
-  );
+      finalRow[key] = rowValue;
+    }
+  });
 
   return finalRow;
 };

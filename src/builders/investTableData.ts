@@ -48,7 +48,7 @@ export const buildAssetTableData = ({
 }: IBuildAssetTableData): ITableRow => {
   return {
     type,
-    cheapStockScore: assetScore(assets[item] as any, type),
+    cheapStockScore: assetScore(assets[item] as never, type),
     symbol: assets[item].papel.toLowerCase(),
     asset: assets[item].nome,
     recommended: recommendedPercentages[item].percentage,

@@ -1,3 +1,6 @@
+//TODO: THINK IF THIS FILE IS EVEN NECESSARY ANYMORE !!!!
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import csvtojsonV2 from 'csvtojson/v2';
 
 import { ICSVFormattedHeader, ICSVHeader, ICSVStockData } from '../interfaces';

@@ -18,7 +18,7 @@ export const assetTypesToCalculate = ({
   goals,
   skipAssets,
 }: AssetTypesToCalculate) => {
-  return Object.keys(goals)
-    .map((asset: any) => asset)
-    .filter(asset => !skipAssets.includes(asset));
+  return Object.keys(goals).filter(
+    asset => !skipAssets.includes(asset as IAssetType),
+  ) as IAssetType[];
 };

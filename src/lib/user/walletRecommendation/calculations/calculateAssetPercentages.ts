@@ -91,16 +91,17 @@ export default (
   resistancePoints: IWalletResistancePoints,
 ): AssetPercentage[] => {
   const positiveAssets = getPositiveAssets(resistancePoints);
-
   const negativeAssets = getNegativeAssets(resistancePoints);
 
   // Set all negative assets to 1%
   const negativeRealPercentages = setNegativeDefault(negativeAssets);
 
+  // Calculate the percentage of points that need to be cut from negative assets in order to balance them with positive assets
   const negativePercentageSum = calculateNegativeCutPercentage(
     negativeRealPercentages,
   );
 
+  // Calculate the percentage of positive assets
   const positiveAssetPercentages = calculatePositivePercentages(
     positiveAssets,
     negativePercentageSum,

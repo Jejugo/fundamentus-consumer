@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import Router from 'koa-router';
 
 import {
@@ -31,31 +30,46 @@ const verifyFirebaseToken = async (ctx, next) => {
     await next();
   } catch (error) {
     ctx.status = 401;
-    ctx.body = 'Invalid token';
+    if (error instanceof Error)
+      ctx.body = {
+        status: 401,
+        message: 'Invalid Token',
+        errorMessage: error.message,
+      };
   }
 };
 
-const setRoutes = (router: Router<any, any>) => {
+export const setHealthRoutes = (router: Router) => {
   router.get('/health', health.get);
+};
 
+export const setAssetRoutes = (router: Router) => {
   router.get('/assets/all/sectors', verifyFirebaseToken, assets.getAllSectors);
   router.delete(
     '/assets/:assetType/:symbol',
     verifyFirebaseToken,
     assets.deleteAsset,
   );
+};
+
+export const setShareRoutes = (router: Router) => {
   router.get('/shares', verifyFirebaseToken, shares.getShares);
   router.get('/shares/sectors', verifyFirebaseToken, shares.getSharesSectors);
-
   router.delete('/shares/:symbol', verifyFirebaseToken, shares.deleteShare);
+};
 
+export const setReitRoutes = (router: Router) => {
   router.get('/reits', verifyFirebaseToken, reits.getReits);
   router.get('/reits/sectors', verifyFirebaseToken, reits.getReitsSectors);
+};
 
+export const setBondRoutes = (router: Router) => {
   router.get('/bonds', verifyFirebaseToken, bonds.getBonds);
   router.get('/bonds/sectors', verifyFirebaseToken, bonds.getBondsSectors);
   router.delete('/bonds/:symbol', verifyFirebaseToken, bonds.deleteBond);
+};
 
+export const setInternationalRoutes = (router: Router) => {
   router.get(
     '/international/assets',
     verifyFirebaseToken,
@@ -66,24 +80,29 @@ const setRoutes = (router: Router<any, any>) => {
     verifyFirebaseToken,
     international.getInternationalSectors,
   );
-  router.get('/crypto/sectors', verifyFirebaseToken, crypto.getCryptoSectors);
+};
 
+export const setCryptoRoutes = (router: Router) => {
+  router.get('/crypto/sectors', verifyFirebaseToken, crypto.getCryptoSectors);
+};
+
+export const setUserRoutes = (router: Router) => {
   router.get('/user/strategy', verifyFirebaseToken, user.getStrategies);
   router.get(
     '/user/recommendation',
     verifyFirebaseToken,
     user.getWalletRecommendation,
   );
-  router.post(
-    '`/user/stocks/fundaments`',
-    verifyFirebaseToken,
-    user.setUserFundaments,
-  );
-  router.get(
-    '/user/stocks/fundaments',
-    verifyFirebaseToken,
-    user.getUserFundaments,
-  );
+  // router.post(
+  //   '`/user/stocks/fundaments`',
+  //   verifyFirebaseToken,
+  //   user.setUserFundaments,
+  // );
+  // router.get(
+  //   '/user/stocks/fundaments',
+  //   verifyFirebaseToken,
+  //   user.getUserFundaments,
+  // );
   router.post(
     '/user/:assetType/sectors',
     verifyFirebaseToken,
@@ -99,18 +118,4 @@ const setRoutes = (router: Router<any, any>) => {
     verifyFirebaseToken,
     user.userRecommendationUpdate,
   );
-};
-
-const createRouter = () => {
-  const router = new Router();
-
-  setRoutes(router);
-
-  return router;
-};
-
-const appRouter = createRouter();
-
-export default {
-  routes: () => appRouter.routes(),
 };

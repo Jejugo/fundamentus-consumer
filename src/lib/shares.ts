@@ -25,10 +25,16 @@ export const getShares = async (optimized = false) => {
 
     const stocksRef = Firestore.collection('stocks');
     const snapshot = await stocksRef.get();
-    const stocks: IStockItem[] = [];
-    snapshot.forEach((doc: any) => {
-      stocks.push(doc.data());
-    });
+
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    const stocks: any = [];
+    snapshot.forEach(
+      (
+        doc: FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>,
+      ) => {
+        stocks.push(doc.data());
+      },
+    );
 
     const items = optimized ? filter.basedOnValidation(stocks) : stocks;
 

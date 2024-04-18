@@ -33,6 +33,7 @@ export const convertObjectKeysToList = <T extends RandomObject<T>>(obj: T) =>
   Object.keys(obj).reduce((acc, key) => {
     return {
       ...acc,
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
       [key]: Object.values(obj[key]).map((item: any) => item),
     };
   }, {});
@@ -42,3 +43,10 @@ export const uniqueArray = array =>
     (item, index, self) =>
       index === self.findIndex(obj => obj.name === item.name),
   );
+
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+export const sortArrayAlphabetically = <T extends RandomObject<any>>(
+  arr: T[],
+  key: string,
+): T[] =>
+  arr.sort((a: T, b: T) => (a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0));

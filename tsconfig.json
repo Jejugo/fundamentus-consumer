@@ -21,6 +21,12 @@
     "baseUrl": "./src",
     "outDir": "./dist"
   },
-  "include": ["src", "server", "**/*.ts"],
+  "include": [
+    "src",
+    "server",
+    "**/*.ts",
+    "functions/lib/index.js",
+    "functions/lib/config.js"
+  ],
   "exclude": ["node_modules"]
 }

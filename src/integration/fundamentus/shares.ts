@@ -1,35 +1,29 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import {
-  IFundamentusStockItem,
-  IFundamentusStockTypes,
-} from '../../lib/interfaces';
+import { IFundamentusStockItem } from '../../lib/interfaces';
 
 import fundamentusConfig from './';
 
 const buildFinalRow = (
   finalRow: IFundamentusStockItem,
-  row: any,
+  row: string[],
 ): IFundamentusStockItem => {
-  Object.keys(finalRow).forEach(
-    // @ts-ignore
-    (key: IFundamentusStockTypes, index: number) => {
-      let rowValue = row[index];
+  Object.keys(finalRow).forEach((key: string, index: number) => {
+    let rowValue: string | number = row[index];
 
-      if (key === 'Papel') {
-        finalRow[key] = rowValue;
-      } else {
-        rowValue = parseFloat(rowValue.replace(/\./g, '').replace(',', '.'));
+    if (key === 'Papel') {
+      finalRow[key] = rowValue;
+    } else {
+      rowValue = parseFloat(rowValue.replace(/\./g, '').replace(',', '.'));
 
-        if (row[index].includes('%')) {
-          rowValue = row[index].split('%')[0].replace(/,/, '.');
-          rowValue = parseFloat((+rowValue / 100).toFixed(4));
-        }
-
-        finalRow[key] = rowValue;
+      if (row[index].includes('%')) {
+        rowValue = row[index].split('%')[0].replace(/,/, '.');
+        rowValue = parseFloat((+rowValue / 100).toFixed(4));
       }
-    },
-  );
+
+      finalRow[key] = rowValue;
+    }
+  });
 
   return finalRow;
 };
@@ -53,22 +47,9 @@ const getSharesFromFundamentus = async (): Promise<
     const rows: IFundamentusStockItem[] = [];
     const response = await axios.get(`${fundamentusConfig.host}/resultado.php`);
     const $ = cheerio.load(response.data);
-    $('table tbody tr').each((index: number, element: cheerio.Element) => {
-      $(element).each(async (index: number, child: cheerio.Element) => {
+    $('table tbody tr').each((_, element: cheerio.Element) => {
+      $(element).each(async (_, child: cheerio.Element) => {
         const row = getRow($, child);
-
-        const response2 = await axios.get(
-          `https://fundamentus.com.br/detalhes.php?papel=${row[0]}`,
-        );
-
-        // const $2 = cheerio.load(response2.data);
-        // $2('div.conteudo table tbody tr').each(
-        //   (index: number, element: cheerio.Element) => {
-        //     const row = getRow($, child);
-        //     console.log(row);
-
-        //   },
-        // );
 
         const finalRow = buildFinalRow(initFinalRow(), row);
         rows.push(finalRow);

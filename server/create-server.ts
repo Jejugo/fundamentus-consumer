@@ -1,5 +1,5 @@
 import Koa from 'koa';
-import routes from '../src/routes';
+import router from '../src/router';
 import cors from '@koa/cors';
 import koaBody from 'koa-body';
 
@@ -13,7 +13,7 @@ const createServer = (): Koa<Koa.DefaultState, Koa.DefaultContext> => {
   const app: Koa = new Koa();
   app.use(koaBody());
   app.use(cors(options));
-  app.use(routes.routes());
+  app.use(router.routes());
 
   return app;
 };
