@@ -3,5 +3,5 @@ export const assetNameMap = {
   stocks: 'ações',
   bonds: 'renda fixa',
   international: 'internacional',
-  crypto: 'crypto',
+  crypto: 'criptomoedas',
 };
