@@ -9,6 +9,8 @@
     "build": "rm -rf dist && tsc",
     "postbuild": "cp package.json dist/package.json",
     "start:debug": "node --inspect server/index.ts",
+    "firebase:emulators": "firebase emulators:start",
+    "firebase:deploy": "firebase deploy",
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts-lint": "tsc --watch",
     "lint": "eslint --fix --ext .json,.js,.spec.js, '**/*/*.ts'"
